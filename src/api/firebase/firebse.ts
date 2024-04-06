@@ -22,8 +22,6 @@ export const getJinx = async () => {
     const ref2 = collection(db, 'champions');
     const champions = await getDocs(ref2);
 
-    //  console.log(champion.data());
-
     champions.forEach(el => {
         console.log(el.data());
     })
