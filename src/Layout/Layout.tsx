@@ -1,17 +1,20 @@
-import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
-import { getJinx } from "../api/firebase/firebse";
 import Home from "../views/Home/Home";
-
-getJinx();
+import Navigation from "../components/Navigation/Navigation";
 
 const Layout = () => {
   return (
     <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
+      <header>
+        <Navigation />
+      </header>
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </main>
+      <footer></footer>
     </Router>
   );
 };
