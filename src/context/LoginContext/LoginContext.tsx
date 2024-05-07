@@ -3,6 +3,7 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
 } from "firebase/auth";
 import { auth, db, provider } from "../../api/firebase/firebse";
 import { doc, getDoc } from "firebase/firestore";
@@ -47,11 +48,13 @@ export const LoginProvider = ({ children }: Props) => {
   }, []);
 
   const handleSignOut = async () => {
-    try {
-      setUserData(null);
-    } catch (error) {
-      console.log(error);
-    }
+    signOut(auth)
+      .then(() => {
+        console.log('wylogowano');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleSignInWithGoogle = async () => {

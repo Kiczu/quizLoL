@@ -29,8 +29,7 @@ const LoginWithGooglebutton = styled(Button)({
 const defaultTheme = createTheme();
 
 const LoginPage = () => {
-  const { userData, handleSignIn, handleSignOut, handleSignInWithGoogle } =
-    useLogin();
+  const { userData, handleSignIn, handleSignInWithGoogle } = useLogin();
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();

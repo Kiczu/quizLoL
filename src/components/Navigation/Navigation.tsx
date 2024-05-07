@@ -39,10 +39,6 @@ const settings = [
     name: "Dashboard",
     href: DASHBOARD,
   },
-  {
-    name: "Logout",
-    href: "/logout",
-  },
 ];
 
 const settingsNotLoggedIn = [
@@ -64,7 +60,7 @@ const Navigation = () => {
     null
   );
 
-  const { userData } = useLogin();
+  const { userData, handleSignOut } = useLogin();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -85,7 +81,6 @@ const Navigation = () => {
     <AppBar className="app-bar">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          {/* <Link to={HOME}> */}
           <Typography
             variant="h6"
             noWrap
@@ -103,8 +98,6 @@ const Navigation = () => {
           >
             LOGO
           </Typography>
-          {/* </Link> */}
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -195,13 +188,20 @@ const Navigation = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settingsNotLoggedIn.map((setting) => (
+              {(userData ? settings : settingsNotLoggedIn).map((setting) => (
                 <Link to={setting.href} key={setting.name}>
                   <MenuItem onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">{setting.name}</Typography>
                   </MenuItem>
                 </Link>
               ))}
+
+              {/* MenuItem dla wylogowania */}
+              {userData && (
+                <MenuItem onClick={handleSignOut}>
+                  <Typography textAlign="center">Wyloguj się</Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>
