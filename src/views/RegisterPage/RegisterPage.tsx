@@ -12,12 +12,21 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../../api/firebase/firebse";
 import { LOGIN } from "../../paths";
+import { useLogin } from "../../context/LoginContext/LoginContext";
 
-// const defaultTheme = createTheme();
+const defaultTheme = createTheme();
+
+const createUser = async ({ id, ...userData }: any) => {
+  await setDoc(doc(db, "users", id), userData);
+};
 
 const SignUp = () => {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const { userData, handleSignIn } = useLogin();
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     console.log({
@@ -25,14 +34,26 @@ const SignUp = () => {
       password: data.get("password"),
     });
 
+    const name = data.get("firstName") as string;
+    const surname = data.get("lastName") as string;
     const eMail = data.get("email") as string;
     const password = data.get("password") as string;
 
     const auth = getAuth();
     createUserWithEmailAndPassword(auth, eMail, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         // Signed up
         const user = userCredential.user;
+        if (user) {
+          console.log("User registered succsfully");
+          const newUserData = {
+            id: user.uid,
+            name,
+            surname,
+            email: user.email,
+          };
+          await createUser(newUserData);
+        }
         // ...
       })
       .catch((error) => {
@@ -43,91 +64,98 @@ const SignUp = () => {
   };
 
   return (
-    // <ThemeProvider theme={defaultTheme}>
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
-        <Typography component="h1" variant="h5">
-          Zarejestruj się
-        </Typography>
-        <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="Imię"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Nazwisko"
-                name="lastName"
-                autoComplete="family-name"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Adres E-mail"
-                name="email"
-                autoComplete="email"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Hasło"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="Zgadzam się na otrzymywanie dodatkowych informacji marketingowych drogą elektroniczną."
-              />
-            </Grid>
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
+          <Typography component="h1" variant="h5">
+            Zarejestruj się
+          </Typography>
+          <Box
+            component="form"
+            noValidate
+            onSubmit={handleSubmit}
+            sx={{ mt: 3 }}
           >
-            Zarejestruj
-          </Button>
-          <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link href={LOGIN} variant="body2">
-                Masz już konto? Zaloguj się
-              </Link>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="Imię"
+                  autoFocus
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  fullWidth
+                  id="lastName"
+                  label="Nazwisko"
+                  name="lastName"
+                  autoComplete="family-name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Adres E-mail"
+                  name="email"
+                  autoComplete="email"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  name="password"
+                  label="Hasło"
+                  type="password"
+                  id="password"
+                  autoComplete="new-password"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControlLabel
+                  control={
+                    <Checkbox value="allowExtraEmails" color="primary" />
+                  }
+                  label="Zgadzam się na otrzymywanie dodatkowych informacji marketingowych drogą elektroniczną."
+                />
+              </Grid>
             </Grid>
-          </Grid>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Zarejestruj
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link href={LOGIN} variant="body2">
+                  Masz już konto? Zaloguj się
+                </Link>
+              </Grid>
+            </Grid>
+          </Box>
         </Box>
-      </Box>
-    </Container>
-    // </ThemeProvider>
+      </Container>
+    </ThemeProvider>
   );
 };
 

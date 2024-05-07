@@ -1,31 +1,45 @@
 import React, { createContext, useEffect, useState } from "react";
-import { onAuthStateChanged, signInWithPopup } from "firebase/auth";
-import { auth, provider } from "../../api/firebase/firebse";
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
+import { auth, db, provider } from "../../api/firebase/firebse";
+import { doc, getDoc } from "firebase/firestore";
 
 interface Props {
   children: React.ReactNode;
 }
 interface UserData {
-  displayName: string;
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
 }
 
 interface LoginContextTyp {
-    user: UserData | null;
+  userData: UserData | null;
   handleSignOut: () => void;
-  handleSignIn: () => void;
+  handleSignIn: (email: string, password: string) => void;
+  handleSignInWithGoogle: () => void;
 }
 
 export const LoginContext = createContext<LoginContextTyp | null>(null);
 
 export const LoginProvider = ({ children }: Props) => {
-  const [user, setUser] = useState<UserData | null>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+
+  const getUserData = async (id: string) => {
+    const userData = await getDoc(doc(db, "users", id));
+    setUserData(userData.data() as UserData);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser({ displayName: user.displayName || "" });
+        getUserData(user.uid);
       } else {
-        setUser(null);
+        setUserData(null);
       }
     });
 
@@ -34,13 +48,13 @@ export const LoginProvider = ({ children }: Props) => {
 
   const handleSignOut = async () => {
     try {
-      setUser(null);
+      setUserData(null);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleSignIn = async () => {
+  const handleSignInWithGoogle = async () => {
     try {
       const authResult = await signInWithPopup(auth, provider);
       console.log(authResult);
@@ -49,8 +63,30 @@ export const LoginProvider = ({ children }: Props) => {
     }
   };
 
+  const handleSignIn = async (email: string, password: string) => {
+    // Dodaj argumenty email i password
+    try {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          setUserData(userData);
+          console.log(user);
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <LoginContext.Provider value={{ user, handleSignOut, handleSignIn }}>
+    <LoginContext.Provider
+      value={{ userData, handleSignOut, handleSignInWithGoogle, handleSignIn }}
+    >
       {children}
     </LoginContext.Provider>
   );

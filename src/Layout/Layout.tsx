@@ -1,28 +1,27 @@
-import React from "react";
-import { Link, Route, Routes } from "react-router-dom";
-import { BrowserRouter as Router } from "react-router-dom";
-import Home from "../views/Home/Home";
-
+import { ReactNode, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
-import LoginPage from "../views/LoginPage/LoginPage";
-import RegisterPage from "../views/RegisterPage/RegisterPage";
-import { HOME, LOGIN, REGISTER } from "../paths";
 
-const Layout = () => {
+interface LayoutProps {
+  children: ReactNode;
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
-    <Router>
+    <>
       <header>
-      <Navigation />
+        <Navigation />
       </header>
       <main>
-        <Routes>
-          <Route path={HOME} element={<Home />} />
-          <Route path={LOGIN} element={<LoginPage />} />
-          
-          <Route path={REGISTER} element={<RegisterPage />} />
-        </Routes>
+        {children}
       </main>
-    </Router>
+      <footer></footer>
+    </>
   );
 };
 

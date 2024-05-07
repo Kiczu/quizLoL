@@ -11,9 +11,50 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { DASHBOARD, LOGIN, PROFILE, REGISTER, HOME } from "../../paths";
+import { useLogin } from "../../context/LoginContext/LoginContext";
+import { Link } from "react-router-dom";
 
-const pages = ["Quiz", "Ranking", "Home"];
-const settings = ["Profile", "Dashboard", "Logout"];
+const pages = [
+  {
+    name: "Quiz",
+    href: HOME,
+  },
+  {
+    name: "Home",
+    href: HOME,
+  },
+  {
+    name: "Ranking",
+    href: HOME,
+  },
+];
+
+const settings = [
+  {
+    name: "Profile",
+    href: PROFILE,
+  },
+  {
+    name: "Dashboard",
+    href: DASHBOARD,
+  },
+  {
+    name: "Logout",
+    href: "/logout",
+  },
+];
+
+const settingsNotLoggedIn = [
+  {
+    name: "Login",
+    href: LOGIN,
+  },
+  {
+    name: "Register",
+    href: REGISTER,
+  },
+];
 
 const Navigation = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -22,6 +63,8 @@ const Navigation = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
     null
   );
+
+  const { userData } = useLogin();
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -42,11 +85,12 @@ const Navigation = () => {
     <AppBar className="app-bar">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* <Link to={HOME}> */}
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
@@ -59,6 +103,7 @@ const Navigation = () => {
           >
             LOGO
           </Typography>
+          {/* </Link> */}
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -90,9 +135,11 @@ const Navigation = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
+                <Link to={page.href} key={page.name}>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{page.name}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
@@ -117,11 +164,11 @@ const Navigation = () => {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
-                key={page}
+                key={page.name}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                {page}
+                <Link to={HOME}>{page.name}</Link>
               </Button>
             ))}
           </Box>
@@ -148,10 +195,12 @@ const Navigation = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
+              {settingsNotLoggedIn.map((setting) => (
+                <Link to={setting.href} key={setting.name}>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
