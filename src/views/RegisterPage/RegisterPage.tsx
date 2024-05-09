@@ -1,66 +1,40 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
+import {
+  Avatar,
+  Button,
+  CssBaseline,
+  TextField,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+  Container,
+  Link,
+  Grid,
+  Box,
+} from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
-import { db } from "../../api/firebase/firebse";
-import { LOGIN } from "../../paths";
+import { Form, Formik } from "formik";
 import { useLogin } from "../../context/LoginContext/LoginContext";
+import { paths } from "../../paths";
+
+interface Values {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 
 const defaultTheme = createTheme();
 
-const createUser = async ({ id, ...userData }: any) => {
-  await setDoc(doc(db, "users", id), userData);
-};
+const RegisterPage = () => {
+  const { handleCreateUser } = useLogin();
 
-const SignUp = () => {
-  const { userData, handleSignIn } = useLogin();
-
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
+  const handleSubmit = (v: Values) => {
+    handleCreateUser({
+      firstName: v.firstName,
+      lastName: v.lastName,
+      email: v.email,
+      password: v.password,
     });
-
-    const name = data.get("firstName") as string;
-    const surname = data.get("lastName") as string;
-    const eMail = data.get("email") as string;
-    const password = data.get("password") as string;
-
-    const auth = getAuth();
-    createUserWithEmailAndPassword(auth, eMail, password)
-      .then(async (userCredential) => {
-        // Signed up
-        const user = userCredential.user;
-        if (user) {
-          console.log("User registered succsfully");
-          const newUserData = {
-            id: user.uid,
-            name,
-            surname,
-            email: user.email,
-          };
-          await createUser(newUserData);
-        }
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // ..
-      });
   };
 
   return (
@@ -79,84 +53,100 @@ const SignUp = () => {
           <Typography component="h1" variant="h5">
             Zarejestruj się
           </Typography>
-          <Box
-            component="form"
-            noValidate
+          <Formik
+            initialValues={{
+              firstName: "",
+              lastName: "",
+              email: "",
+              password: "",
+            }}
             onSubmit={handleSubmit}
-            sx={{ mt: 3 }}
           >
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
+            {({ values, handleChange, handleSubmit }) => (
+              <Form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      autoComplete="given-name"
+                      name="firstName"
+                      required
+                      fullWidth
+                      id="firstName"
+                      label="Imię"
+                      autoFocus
+                      value={values.firstName}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="lastName"
+                      label="Nazwisko"
+                      name="lastName"
+                      autoComplete="family-name"
+                      value={values.lastName}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="Adres E-mail"
+                      name="email"
+                      autoComplete="email"
+                      value={values.email}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="password"
+                      label="Hasło"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
+                      value={values.password}
+                      onChange={handleChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormControlLabel
+                      control={
+                        <Checkbox value="allowExtraEmails" color="primary" />
+                      }
+                      label="Zgadzam się na otrzymywanie dodatkowych informacji marketingowych drogą elektroniczną."
+                    />
+                  </Grid>
+                </Grid>
+                <Button
+                  type="submit"
                   fullWidth
-                  id="firstName"
-                  label="Imię"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Nazwisko"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Adres E-mail"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Hasło"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="Zgadzam się na otrzymywanie dodatkowych informacji marketingowych drogą elektroniczną."
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Zarejestruj
-            </Button>
-            <Grid container justifyContent="flex-end">
-              <Grid item>
-                <Link href={LOGIN} variant="body2">
-                  Masz już konto? Zaloguj się
-                </Link>
-              </Grid>
-            </Grid>
-          </Box>
+                  variant="contained"
+                  color="primary"
+                  sx={{ mt: 3, mb: 2 }}
+                >
+                  Zarejestruj
+                </Button>
+                <Grid container justifyContent="flex-end">
+                  <Grid item>
+                    <Link href={paths.LOGIN} variant="body2">
+                      Masz już konto? Zaloguj się
+                    </Link>
+                  </Grid>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
         </Box>
       </Container>
     </ThemeProvider>
   );
 };
 
-export default SignUp;
+export default RegisterPage;

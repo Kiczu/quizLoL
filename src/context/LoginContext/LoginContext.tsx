@@ -1,11 +1,13 @@
 import React, { createContext, useEffect, useState } from "react";
 import {
+  createUserWithEmailAndPassword,
+  getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-import { auth, db, provider } from "../../api/firebase/firebse";
+import { auth, createUser, db, provider } from "../../api/firebase/firebse";
 import { doc, getDoc } from "firebase/firestore";
 
 interface Props {
@@ -17,23 +19,25 @@ interface UserData {
   email: string;
   password: string;
 }
+interface CreateUserValues {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
 
 interface LoginContextTyp {
   userData: UserData | null;
   handleSignOut: () => void;
   handleSignIn: (email: string, password: string) => void;
   handleSignInWithGoogle: () => void;
+  handleCreateUser: (values: CreateUserValues) => void;
 }
 
 export const LoginContext = createContext<LoginContextTyp | null>(null);
 
 export const LoginProvider = ({ children }: Props) => {
   const [userData, setUserData] = useState<UserData | null>(null);
-
-  const getUserData = async (id: string) => {
-    const userData = await getDoc(doc(db, "users", id));
-    setUserData(userData.data() as UserData);
-  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -47,10 +51,39 @@ export const LoginProvider = ({ children }: Props) => {
     return () => unsubscribe();
   }, []);
 
+  const getUserData = async (id: string) => {
+    const userData = await getDoc(doc(db, "users", id));
+    setUserData(userData.data() as UserData);
+  };
+
+  const handleCreateUser = async (values: CreateUserValues) => {
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password
+      );
+      const user = userCredential.user;
+      if (user) {
+        const newUserData = {
+          id: user.uid,
+          name: values.firstName,
+          surname: values.lastName,
+          email: user.email,
+        };
+        await createUser(newUserData);
+        console.log("User registered successfully");
+      }
+    } catch (error) {
+      console.error("Error registering user:", error);
+    }
+  };
+
   const handleSignOut = async () => {
     signOut(auth)
       .then(() => {
-        console.log('wylogowano');
+        console.log("wylogowano");
       })
       .catch((error) => {
         console.log(error);
@@ -67,7 +100,6 @@ export const LoginProvider = ({ children }: Props) => {
   };
 
   const handleSignIn = async (email: string, password: string) => {
-    // Dodaj argumenty email i password
     try {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
@@ -88,7 +120,13 @@ export const LoginProvider = ({ children }: Props) => {
 
   return (
     <LoginContext.Provider
-      value={{ userData, handleSignOut, handleSignInWithGoogle, handleSignIn }}
+      value={{
+        userData,
+        handleSignOut,
+        handleSignInWithGoogle,
+        handleSignIn,
+        handleCreateUser,
+      }}
     >
       {children}
     </LoginContext.Provider>

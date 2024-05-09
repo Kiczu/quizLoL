@@ -1,5 +1,7 @@
-export const HOME = '/';
-export const LOGIN = '/login';
-export const REGISTER = '/register';
-export const PROFILE = '/profile';
-export const DASHBOARD = '/dashboard';
+export const paths = {
+    HOME: '/',
+    LOGIN: '/login',
+    REGISTER: '/register',
+    PROFILE: '/profile',
+    DASHBOARD: '/dashboard'
+}

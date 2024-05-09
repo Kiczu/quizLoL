@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, collection, getDocs, setDoc } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -14,6 +14,10 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
 export const auth = getAuth();
+
+export const createUser = async ({ id, ...userData }: any) => {
+    await setDoc(doc(db, "users", id), userData);
+  };
 
 export const getJinx = async () => {
     const ref = doc(db, 'champions', 'mQTzrtYjpdVEZDZxWmQ6');

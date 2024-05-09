@@ -11,44 +11,44 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import { GiHamburgerMenu } from "react-icons/gi";
-import { DASHBOARD, LOGIN, PROFILE, REGISTER, HOME } from "../../paths";
+import { paths } from "../../paths";
 import { useLogin } from "../../context/LoginContext/LoginContext";
 import { Link } from "react-router-dom";
 
 const pages = [
   {
     name: "Quiz",
-    href: HOME,
+    href: paths.HOME,
   },
   {
     name: "Home",
-    href: HOME,
+    href: paths.HOME,
   },
   {
     name: "Ranking",
-    href: HOME,
+    href: paths.HOME,
   },
 ];
 
 const settings = [
   {
     name: "Profile",
-    href: PROFILE,
+    href: paths.PROFILE,
   },
   {
     name: "Dashboard",
-    href: DASHBOARD,
+    href: paths.DASHBOARD,
   },
 ];
 
 const settingsNotLoggedIn = [
   {
     name: "Login",
-    href: LOGIN,
+    href: paths.LOGIN,
   },
   {
     name: "Register",
-    href: REGISTER,
+    href: paths.REGISTER,
   },
 ];
 
@@ -161,7 +161,7 @@ const Navigation = () => {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
               >
-                <Link to={HOME}>{page.name}</Link>
+                <Link to={paths.HOME}>{page.name}</Link>
               </Button>
             ))}
           </Box>
