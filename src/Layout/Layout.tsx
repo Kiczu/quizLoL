@@ -1,12 +1,8 @@
-import { ReactNode, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
 
-interface LayoutProps {
-  children: ReactNode;
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => {
+const Layout = () => {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -18,7 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Navigation />
       </header>
       <main>
-        {children}
+        <Outlet />
       </main>
       <footer></footer>
     </>

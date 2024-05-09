@@ -16,14 +16,14 @@ root.render(
   <React.StrictMode>
     <LoginProvider>
       <Router basename="/">
-        <Layout>
-          <Routes>
+        <Routes>
+          <Route path={paths.HOME} element={<Layout />}>
             <Route path={paths.HOME} element={<Home />} />
             <Route path={paths.LOGIN} element={<LoginPage />} />
 
             <Route path={paths.REGISTER} element={<RegisterPage />} />
-          </Routes>
-        </Layout>
+          </Route>
+        </Routes>
       </Router>
     </LoginProvider>
   </React.StrictMode>

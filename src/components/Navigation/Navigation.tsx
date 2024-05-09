@@ -85,7 +85,7 @@ const Navigation = () => {
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            href={paths.HOME}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
