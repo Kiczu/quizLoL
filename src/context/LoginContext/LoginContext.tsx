@@ -19,19 +19,13 @@ interface UserData {
   email: string;
   password: string;
 }
-interface CreateUserValues {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
 
 interface LoginContextType {
   userData: UserData | null;
   handleSignOut: () => void;
   handleSignIn: (email: string, password: string) => void;
   handleSignInWithGoogle: () => void;
-  handleCreateUser: (values: CreateUserValues) => void;
+  handleCreateUser: (values: UserData) => void;
 }
 
 export const LoginContext = createContext<LoginContextType | null>(null);
@@ -56,7 +50,7 @@ export const LoginProvider = ({ children }: Props) => {
     setUserData(userData.data() as UserData);
   };
 
-  const handleCreateUser = async (values: CreateUserValues) => {
+  const handleCreateUser = async (values: UserData) => {
     try {
       const auth = getAuth();
       const userCredential = await createUserWithEmailAndPassword(
@@ -68,8 +62,8 @@ export const LoginProvider = ({ children }: Props) => {
       if (user) {
         const newUserData = {
           id: user.uid,
-          name: values.firstName,
-          surname: values.lastName,
+          name: values.name,
+          surname: values.surname,
           email: user.email,
         };
         await createUser(newUserData);
@@ -133,7 +127,7 @@ export const LoginProvider = ({ children }: Props) => {
   );
 };
 
-export const useLogin = () => {
+export const useAuth = () => {
   const context = React.useContext(LoginContext);
 
   if (!context) {

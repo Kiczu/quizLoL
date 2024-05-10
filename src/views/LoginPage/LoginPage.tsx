@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import { Form, Formik } from "formik";
-import { useLogin } from "../../context/LoginContext/LoginContext";
+import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
 
 const LoginWithGooglebutton = styled(Button)({
@@ -35,7 +35,7 @@ interface Values {
 const defaultTheme = createTheme();
 
 const LoginPage = () => {
-  const { handleSignIn, handleSignInWithGoogle } = useLogin();
+  const { handleSignIn, handleSignInWithGoogle } = useAuth();
 
   const handleSubmit = (v: Values) => {
     const eMail = v.email;

@@ -14,7 +14,7 @@ import {
 import { Link } from "react-router-dom";
 import MobileNav from "./MobileNav/MobileNav";
 import DesktopNav from "./DesktopNav/DesktopNav";
-import { useLogin } from "../../context/LoginContext/LoginContext";
+import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
 
 const pages = [
@@ -58,7 +58,7 @@ const Navigation = () => {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const { userData, handleSignOut } = useLogin();
+  const { userData, handleSignOut } = useAuth();
 
   const handleOpenUserMenu = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorElUser(e.currentTarget);

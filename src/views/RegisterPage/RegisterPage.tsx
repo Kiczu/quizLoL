@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Form, Formik } from "formik";
-import { useLogin } from "../../context/LoginContext/LoginContext";
+import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
 
 interface Values {
@@ -26,12 +26,12 @@ interface Values {
 const defaultTheme = createTheme();
 
 const RegisterPage = () => {
-  const { handleCreateUser } = useLogin();
+  const { handleCreateUser } = useAuth();
 
   const handleSubmit = (v: Values) => {
     handleCreateUser({
-      firstName: v.firstName,
-      lastName: v.lastName,
+      name: v.firstName,
+      surname: v.lastName,
       email: v.email,
       password: v.password,
     });
