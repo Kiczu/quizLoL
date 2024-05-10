@@ -26,7 +26,7 @@ interface CreateUserValues {
   password: string;
 }
 
-interface LoginContextTyp {
+interface LoginContextType {
   userData: UserData | null;
   handleSignOut: () => void;
   handleSignIn: (email: string, password: string) => void;
@@ -34,7 +34,7 @@ interface LoginContextTyp {
   handleCreateUser: (values: CreateUserValues) => void;
 }
 
-export const LoginContext = createContext<LoginContextTyp | null>(null);
+export const LoginContext = createContext<LoginContextType | null>(null);
 
 export const LoginProvider = ({ children }: Props) => {
   const [userData, setUserData] = useState<UserData | null>(null);
