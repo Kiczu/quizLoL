@@ -60,17 +60,12 @@ const Navigation = () => {
 
   const { userData, handleSignOut } = useAuth();
 
-  const handleOpenUserMenu = (e: React.MouseEvent<HTMLElement>) => {
+  const handleOpenUserMenu = (e: React.MouseEvent<HTMLElement>) =>
     setAnchorElUser(e.currentTarget);
-  };
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const handleCloseNavMenu = () => setAnchorElNav(null);
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const handleCloseUserMenu = () => setAnchorElUser(null);
 
   const visibleSetting = userData ? settings : settingsNotLoggedIn;
 

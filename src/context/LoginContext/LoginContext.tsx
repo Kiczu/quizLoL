@@ -9,15 +9,10 @@ import {
 } from "firebase/auth";
 import { auth, createUser, db, provider } from "../../api/firebase/firebse";
 import { doc, getDoc } from "firebase/firestore";
+import { UserData } from "../../api/types";
 
 interface Props {
   children: React.ReactNode;
-}
-interface UserData {
-  name: string;
-  surname: string;
-  email: string;
-  password: string;
 }
 
 interface LoginContextType {
@@ -62,8 +57,8 @@ export const LoginProvider = ({ children }: Props) => {
       if (user) {
         const newUserData = {
           id: user.uid,
-          name: values.name,
-          surname: values.surname,
+          name: values.firstName,
+          surname: values.lastName,
           email: user.email,
         };
         await createUser(newUserData);

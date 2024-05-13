@@ -32,16 +32,18 @@ interface Values {
   password: string;
 }
 
+const initValues: Values = {
+  email: "",
+  password: "",
+};
+
 const defaultTheme = createTheme();
 
 const LoginPage = () => {
   const { handleSignIn, handleSignInWithGoogle } = useAuth();
 
-  const handleSubmit = (v: Values) => {
-    const eMail = v.email;
-    const password = v.password;
-
-    handleSignIn(eMail, password);
+  const handleSubmit = ({ email, password }: Values) => {
+    handleSignIn(email, password);
   };
 
   return (
@@ -77,12 +79,9 @@ const LoginPage = () => {
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              Zaloguj się
             </Typography>
-            <Formik
-              initialValues={{ email: "", password: "" }}
-              onSubmit={handleSubmit}
-            >
+            <Formik initialValues={initValues} onSubmit={handleSubmit}>
               {({ values, handleChange, handleSubmit }) => (
                 <Form onSubmit={handleSubmit}>
                   <Box sx={{ mt: 1 }}>
@@ -109,10 +108,6 @@ const LoginPage = () => {
                       autoComplete="current-password"
                       value={values.password}
                       onChange={handleChange}
-                    />
-                    <FormControlLabel
-                      control={<Checkbox value="remember" color="primary" />}
-                      label="Zapamiętaj mnie"
                     />
                     <Button
                       type="submit"

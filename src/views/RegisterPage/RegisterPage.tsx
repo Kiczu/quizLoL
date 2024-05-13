@@ -3,8 +3,6 @@ import {
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Typography,
   Container,
   Link,
@@ -15,27 +13,21 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Form, Formik } from "formik";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
+import type { UserData } from "../../api/types";
 
-interface Values {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
+const initValues: UserData = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+};
 
 const defaultTheme = createTheme();
 
 const RegisterPage = () => {
   const { handleCreateUser } = useAuth();
 
-  const handleSubmit = (v: Values) => {
-    handleCreateUser({
-      name: v.firstName,
-      surname: v.lastName,
-      email: v.email,
-      password: v.password,
-    });
-  };
+  const handleSubmit = (values: UserData) => handleCreateUser(values);
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -43,25 +35,17 @@ const RegisterPage = () => {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 15,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" variant="h5" margin={2}>
             Zarejestruj się
           </Typography>
-          <Formik
-            initialValues={{
-              firstName: "",
-              lastName: "",
-              email: "",
-              password: "",
-            }}
-            onSubmit={handleSubmit}
-          >
+          <Formik initialValues={initValues} onSubmit={handleSubmit}>
             {({ values, handleChange, handleSubmit }) => (
               <Form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
@@ -80,24 +64,24 @@ const RegisterPage = () => {
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <TextField
+                      autoComplete="family-name"
+                      name="lastName"
                       required
                       fullWidth
                       id="lastName"
                       label="Nazwisko"
-                      name="lastName"
-                      autoComplete="family-name"
                       value={values.lastName}
                       onChange={handleChange}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
+                      autoComplete="email"
+                      name="email"
                       required
                       fullWidth
                       id="email"
                       label="Adres E-mail"
-                      name="email"
-                      autoComplete="email"
                       value={values.email}
                       onChange={handleChange}
                     />
@@ -110,17 +94,8 @@ const RegisterPage = () => {
                       label="Hasło"
                       type="password"
                       id="password"
-                      autoComplete="new-password"
                       value={values.password}
                       onChange={handleChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormControlLabel
-                      control={
-                        <Checkbox value="allowExtraEmails" color="primary" />
-                      }
-                      label="Zgadzam się na otrzymywanie dodatkowych informacji marketingowych drogą elektroniczną."
                     />
                   </Grid>
                 </Grid>
