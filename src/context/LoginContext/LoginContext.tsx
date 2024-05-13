@@ -57,8 +57,8 @@ export const LoginProvider = ({ children }: Props) => {
       if (user) {
         const newUserData = {
           id: user.uid,
-          name: values.firstName,
-          surname: values.lastName,
+          firstName: values.firstName,
+          lastName: values.lastName,
           email: user.email,
         };
         await createUser(newUserData);
