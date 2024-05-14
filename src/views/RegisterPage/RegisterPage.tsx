@@ -1,3 +1,4 @@
+import * as yup from "yup";
 import {
   Avatar,
   Button,
@@ -10,10 +11,20 @@ import {
   Box,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { Form, Formik } from "formik";
+import { ErrorMessage, Form, Formik } from "formik";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
 import type { UserData } from "../../api/types";
+
+const registerSchema = yup.object().shape({
+  firstName: yup.string().required("required"),
+  lastName: yup.string().required("required"),
+  // userType: yup.string().required("required"),
+  // userName: yup.string().required("required"),
+  email: yup.string().email("invalid email").required("required"),
+  password: yup.string().required("required"),
+  // confirmPassword: yup.string().required("required"),
+});
 
 const initValues: UserData = {
   firstName: "",
@@ -45,8 +56,12 @@ const RegisterPage = () => {
           <Typography component="h1" variant="h5" margin={2}>
             Zarejestruj się
           </Typography>
-          <Formik initialValues={initValues} onSubmit={handleSubmit}>
-            {({ values, handleChange, handleSubmit }) => (
+          <Formik
+            initialValues={initValues}
+            onSubmit={handleSubmit}
+            validationSchema={registerSchema}
+          >
+            {({ values, handleChange, handleSubmit, errors, touched }) => (
               <Form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
@@ -60,6 +75,10 @@ const RegisterPage = () => {
                       autoFocus
                       value={values.firstName}
                       onChange={handleChange}
+                      error={
+                        Boolean(touched.firstName) && Boolean(errors.firstName)
+                      }
+                      helperText={touched.firstName && errors.firstName}
                     />
                   </Grid>
                   <Grid item xs={12} sm={6}>
@@ -73,6 +92,7 @@ const RegisterPage = () => {
                       value={values.lastName}
                       onChange={handleChange}
                     />
+                    <ErrorMessage name="lastName" component="span" />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
@@ -85,6 +105,9 @@ const RegisterPage = () => {
                       value={values.email}
                       onChange={handleChange}
                     />
+                    {errors.email && touched.email ? (
+                      <div>{errors.email}</div>
+                    ) : null}
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
@@ -97,6 +120,7 @@ const RegisterPage = () => {
                       value={values.password}
                       onChange={handleChange}
                     />
+                    <ErrorMessage name="password" component="span" />
                   </Grid>
                 </Grid>
                 <Button
