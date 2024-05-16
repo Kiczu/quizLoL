@@ -94,8 +94,8 @@ const RegisterPage = () => {
                       error={
                         (Boolean(touched.firstName) &&
                           Boolean(errors.firstName)) ||
-                        (Boolean(values.confirmPassword) &&
-                          !errors.confirmPassword)
+                        (Boolean(values.firstName) &&
+                          !errors.firstName)
                       }
                       helperText={touched.firstName && errors.firstName}
                     />
@@ -113,8 +113,8 @@ const RegisterPage = () => {
                       error={
                         (Boolean(touched.lastName) &&
                           Boolean(errors.lastName)) ||
-                        (Boolean(values.confirmPassword) &&
-                          !errors.confirmPassword)
+                        (Boolean(values.lastName) &&
+                          !errors.lastName)
                       }
                       helperText={touched.lastName && errors.lastName}
                     />
@@ -131,8 +131,8 @@ const RegisterPage = () => {
                       onBlur={handleBlur}
                       error={
                         (Boolean(touched.email) && Boolean(errors.email)) ||
-                        (Boolean(values.confirmPassword) &&
-                          !errors.confirmPassword)
+                        (Boolean(values.email) &&
+                          !errors.email)
                       }
                       helperText={touched.email && errors.email}
                     />
@@ -150,8 +150,8 @@ const RegisterPage = () => {
                       error={
                         (Boolean(touched.password) &&
                           Boolean(errors.password)) ||
-                        (Boolean(values.confirmPassword) &&
-                          !errors.confirmPassword)
+                        (Boolean(values.password) &&
+                          !errors.password)
                       }
                       helperText={touched.password && errors.password}
                     />
