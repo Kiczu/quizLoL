@@ -11,26 +11,35 @@ import {
   Box,
 } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { ErrorMessage, Form, Formik } from "formik";
+import { Form, Formik } from "formik";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
 import type { UserData } from "../../api/types";
 
 const registerSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  // userType: yup.string().required("required"),
-  // userName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  password: yup.string().required("required"),
-  // confirmPassword: yup.string().required("required"),
+  firstName: yup.string().required("Imię jest wymagane"),
+  lastName: yup.string().required("Nazwisko jest wymagane"),
+  email: yup
+    .string()
+    .email("Wprowadź poprawny adres E-Mail")
+    .required("E-Mail jest wymagany"),
+  password: yup.string().required("Hasło jest wymagane"),
+  confirmPassword: yup
+    .string()
+    .required("Hasła muszą być takie same")
+    .oneOf([yup.ref("password")], "Hasła muszą być takie same"),
 });
 
-const initValues: UserData = {
+interface RegistrationData extends UserData {
+  confirmPassword: string;
+}
+
+const initValues: RegistrationData = {
   firstName: "",
   lastName: "",
   email: "",
   password: "",
+  confirmPassword: "",
 };
 
 const defaultTheme = createTheme();
@@ -61,22 +70,32 @@ const RegisterPage = () => {
             onSubmit={handleSubmit}
             validationSchema={registerSchema}
           >
-            {({ values, handleChange, handleSubmit, errors, touched }) => (
+            {({
+              values,
+              handleBlur,
+              handleChange,
+              handleSubmit,
+              errors,
+              touched,
+            }) => (
               <Form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       autoComplete="given-name"
                       name="firstName"
-                      required
                       fullWidth
                       id="firstName"
                       label="Imię"
                       autoFocus
                       value={values.firstName}
+                      onBlur={handleBlur}
                       onChange={handleChange}
                       error={
-                        Boolean(touched.firstName) && Boolean(errors.firstName)
+                        (Boolean(touched.firstName) &&
+                          Boolean(errors.firstName)) ||
+                        (Boolean(values.confirmPassword) &&
+                          !errors.confirmPassword)
                       }
                       helperText={touched.firstName && errors.firstName}
                     />
@@ -85,33 +104,41 @@ const RegisterPage = () => {
                     <TextField
                       autoComplete="family-name"
                       name="lastName"
-                      required
                       fullWidth
                       id="lastName"
                       label="Nazwisko"
                       value={values.lastName}
                       onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={
+                        (Boolean(touched.lastName) &&
+                          Boolean(errors.lastName)) ||
+                        (Boolean(values.confirmPassword) &&
+                          !errors.confirmPassword)
+                      }
+                      helperText={touched.lastName && errors.lastName}
                     />
-                    <ErrorMessage name="lastName" component="span" />
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
                       autoComplete="email"
                       name="email"
-                      required
                       fullWidth
                       id="email"
                       label="Adres E-mail"
                       value={values.email}
                       onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={
+                        (Boolean(touched.email) && Boolean(errors.email)) ||
+                        (Boolean(values.confirmPassword) &&
+                          !errors.confirmPassword)
+                      }
+                      helperText={touched.email && errors.email}
                     />
-                    {errors.email && touched.email ? (
-                      <div>{errors.email}</div>
-                    ) : null}
                   </Grid>
                   <Grid item xs={12}>
                     <TextField
-                      required
                       fullWidth
                       name="password"
                       label="Hasło"
@@ -119,8 +146,36 @@ const RegisterPage = () => {
                       id="password"
                       value={values.password}
                       onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={
+                        (Boolean(touched.password) &&
+                          Boolean(errors.password)) ||
+                        (Boolean(values.confirmPassword) &&
+                          !errors.confirmPassword)
+                      }
+                      helperText={touched.password && errors.password}
                     />
-                    <ErrorMessage name="password" component="span" />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      fullWidth
+                      name="confirmPassword"
+                      label="Potwierdź hasło"
+                      type="password"
+                      id="confirmPassword"
+                      value={values.confirmPassword}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={
+                        (Boolean(touched.confirmPassword) &&
+                          Boolean(errors.confirmPassword)) ||
+                        (Boolean(values.confirmPassword) &&
+                          !errors.confirmPassword)
+                      }
+                      helperText={
+                        touched.confirmPassword && errors.confirmPassword
+                      }
+                    />
                   </Grid>
                 </Grid>
                 <Button
