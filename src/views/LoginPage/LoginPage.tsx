@@ -1,10 +1,9 @@
+import * as yup from "yup";
 import {
   Avatar,
   Button,
   CssBaseline,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Link,
   Paper,
   Box,
@@ -25,6 +24,13 @@ const LoginWithGooglebutton = styled(Button)({
   height: 48,
   padding: "0 30px",
   width: "100%",
+});
+const loginSchema = yup.object().shape({
+  email: yup
+    .string()
+    .email("Wprowadź poprawny adres E-Mail")
+    .required("E-Mail jest wymagany"),
+  password: yup.string().required("Hasło jest wymagane"),
 });
 
 interface Values {
@@ -81,13 +87,23 @@ const LoginPage = () => {
             <Typography component="h1" variant="h5">
               Zaloguj się
             </Typography>
-            <Formik initialValues={initValues} onSubmit={handleSubmit}>
-              {({ values, handleChange, handleSubmit }) => (
+            <Formik
+              initialValues={initValues}
+              onSubmit={handleSubmit}
+              validationSchema={loginSchema}
+            >
+              {({
+                values,
+                handleChange,
+                handleSubmit,
+                handleBlur,
+                errors,
+                touched,
+              }) => (
                 <Form onSubmit={handleSubmit}>
                   <Box sx={{ mt: 1 }}>
                     <TextField
                       margin="normal"
-                      required
                       fullWidth
                       id="email"
                       label="Adres e-mail"
@@ -96,10 +112,14 @@ const LoginPage = () => {
                       autoFocus
                       value={values.email}
                       onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={
+                        (Boolean(touched.email) && Boolean(errors.email))
+                      }
+                      helperText={touched.email && errors.email}
                     />
                     <TextField
                       margin="normal"
-                      required
                       fullWidth
                       name="password"
                       label="Hasło"
@@ -108,6 +128,11 @@ const LoginPage = () => {
                       autoComplete="current-password"
                       value={values.password}
                       onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={
+                        (Boolean(touched.password) && Boolean(errors.password))
+                      }
+                      helperText={touched.password && errors.password}
                     />
                     <Button
                       type="submit"
