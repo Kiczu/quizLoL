@@ -1,131 +1,89 @@
-import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
-import { GiHamburgerMenu } from "react-icons/gi";
+import { useState } from "react";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  Container,
+  Avatar,
+  Tooltip,
+  MenuItem,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import MobileNav from "./MobileNav/MobileNav";
+import DesktopNav from "./DesktopNav/DesktopNav";
+import { useAuth } from "../../context/LoginContext/LoginContext";
+import { paths } from "../../paths";
 
-const pages = ["Quiz", "Ranking", "Home"];
-const settings = ["Profile", "Dashboard", "Logout"];
+const pages = [
+  {
+    name: "Quiz",
+    href: paths.HOME,
+  },
+  {
+    name: "Home",
+    href: paths.HOME,
+  },
+  {
+    name: "Ranking",
+    href: paths.HOME,
+  },
+];
+
+const settings = [
+  {
+    name: "Profile",
+    href: paths.PROFILE,
+  },
+  {
+    name: "Dashboard",
+    href: paths.DASHBOARD,
+  },
+];
+
+const settingsNotLoggedIn = [
+  {
+    name: "Login",
+    href: paths.LOGIN,
+  },
+  {
+    name: "Register",
+    href: paths.REGISTER,
+  },
+];
 
 const Navigation = () => {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
-    null
-  );
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
-    null
-  );
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
-  const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorElUser(event.currentTarget);
-  };
+  const { userData, handleSignOut } = useAuth();
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
+  const handleOpenUserMenu = (e: React.MouseEvent<HTMLElement>) =>
+    setAnchorElUser(e.currentTarget);
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const handleOpenNavMenu = (e: React.MouseEvent<HTMLElement>) =>
+    setAnchorElNav(e.currentTarget);
+
+  const handleCloseNavMenu = () => setAnchorElNav(null);
+
+  const handleCloseUserMenu = () => setAnchorElUser(null);
+
+  const visibleSetting = userData ? settings : settingsNotLoggedIn;
 
   return (
     <AppBar className="app-bar">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <GiHamburgerMenu />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page}
-              </Button>
-            ))}
-          </Box>
-
+          <MobileNav
+            pages={pages}
+            handleCloseNavMenu={handleCloseNavMenu}
+            handleCloseUserMenu={handleCloseUserMenu}
+            handleOpenNavMenu={handleOpenNavMenu}
+            anchorElNav={anchorElNav}
+          />
+          <DesktopNav pages={pages} handleCloseNavMenu={handleCloseNavMenu} />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -148,11 +106,19 @@ const Navigation = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
+              {visibleSetting.map((setting) => (
+                <Link to={setting.href} key={setting.name}>
+                  <MenuItem onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
+
+              {userData && (
+                <MenuItem onClick={handleSignOut}>
+                  <Typography textAlign="center">Wyloguj się</Typography>
+                </MenuItem>
+              )}
             </Menu>
           </Box>
         </Toolbar>

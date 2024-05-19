@@ -1,21 +1,23 @@
-import { Route, Routes } from "react-router-dom";
-import { BrowserRouter as Router } from "react-router-dom";
-import Home from "../views/Home/Home";
+import { useEffect } from "react";
+import { Outlet, useLocation } from "react-router-dom";
 import Navigation from "../components/Navigation/Navigation";
 
 const Layout = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
-    <Router>
+    <>
       <header>
         <Navigation />
       </header>
       <main>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
+        <Outlet />
       </main>
       <footer></footer>
-    </Router>
+    </>
   );
 };
 
