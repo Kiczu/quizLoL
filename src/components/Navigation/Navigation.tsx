@@ -63,6 +63,9 @@ const Navigation = () => {
   const handleOpenUserMenu = (e: React.MouseEvent<HTMLElement>) =>
     setAnchorElUser(e.currentTarget);
 
+  const handleOpenNavMenu = (e: React.MouseEvent<HTMLElement>) =>
+    setAnchorElNav(e.currentTarget);
+
   const handleCloseNavMenu = () => setAnchorElNav(null);
 
   const handleCloseUserMenu = () => setAnchorElUser(null);
@@ -77,7 +80,7 @@ const Navigation = () => {
             pages={pages}
             handleCloseNavMenu={handleCloseNavMenu}
             handleCloseUserMenu={handleCloseUserMenu}
-            setAnchorElNav={setAnchorElNav}
+            handleOpenNavMenu={handleOpenNavMenu}
             anchorElNav={anchorElNav}
           />
           <DesktopNav pages={pages} handleCloseNavMenu={handleCloseNavMenu} />

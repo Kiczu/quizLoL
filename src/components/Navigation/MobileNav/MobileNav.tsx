@@ -18,8 +18,8 @@ interface MobileNavProps {
     href: string;
   }[];
   handleCloseNavMenu: () => void;
-  setAnchorElNav: (element: null | HTMLElement) => void;
   handleCloseUserMenu: () => void;
+  handleOpenNavMenu: (event: React.MouseEvent<HTMLElement>) => void;
   anchorElNav: null | HTMLElement;
 }
 
@@ -27,13 +27,9 @@ const MobileNav = ({
   pages,
   handleCloseNavMenu,
   anchorElNav,
-  setAnchorElNav,
   handleCloseUserMenu,
+  handleOpenNavMenu,
 }: MobileNavProps) => {
-  const handleOpenNavMenu = (e: React.MouseEvent<HTMLElement>) => {
-    setAnchorElNav(e.currentTarget);
-  };
-
   return (
     <ThemeProvider theme={defaultTheme}>
       <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>

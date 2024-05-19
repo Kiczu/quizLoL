@@ -23,7 +23,13 @@ const registerSchema = yup.object().shape({
     .string()
     .email("Wprowadź poprawny adres E-Mail")
     .required("E-Mail jest wymagany"),
-  password: yup.string().required("Hasło jest wymagane"),
+  password: yup
+    .string()
+    .required("Hasło jest wymagane")
+    .min(8, "Hasło musi mieć co najmniej 8 znaków")
+    .matches(/[A-Z]/, "Hasło musi zawierać dużą literę")
+    .matches(/[0-9]/, "Hasło musi zawierać cyfrę")
+    .matches(/[^\w]/, "Hasło musi zawierać znak specjalny"),
   confirmPassword: yup
     .string()
     .required("Hasła muszą być takie same")
