@@ -7,6 +7,7 @@ import Layout from "./Layout/Layout";
 import Home from "./views/Home/Home";
 import LoginPage from "./views/LoginPage/LoginPage";
 import RegisterPage from "./views/RegisterPage/RegisterPage";
+import Lore from "./views/Lore/Lore";
 import "./index.css";
 
 const root = ReactDOM.createRoot(
@@ -19,8 +20,9 @@ root.render(
         <Routes>
           <Route path={paths.HOME} element={<Layout />}>
             <Route path={paths.HOME} element={<Home />} />
-            <Route path={paths.LOGIN} element={<LoginPage />} />
+            <Route path={paths.LORE} element={<Lore />} />
 
+            <Route path={paths.LOGIN} element={<LoginPage />} />
             <Route path={paths.REGISTER} element={<RegisterPage />} />
           </Route>
         </Routes>

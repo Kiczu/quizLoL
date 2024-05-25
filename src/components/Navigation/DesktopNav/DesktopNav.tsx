@@ -43,7 +43,7 @@ const DesktopNav = ({ pages, handleCloseNavMenu }: DesktopNavProps) => {
             onClick={handleCloseNavMenu}
             sx={{ my: 2, color: "white", display: "block" }}
           >
-            <Link to={paths.HOME}>{page.name}</Link>
+            <Link to={page.href}>{page.name}</Link>
           </Button>
         ))}
       </Box>

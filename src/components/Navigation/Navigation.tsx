@@ -30,6 +30,10 @@ const pages = [
     name: "Ranking",
     href: paths.HOME,
   },
+  {
+    name: "Lore",
+    href: paths.LORE,
+  },
 ];
 
 const settings = [
