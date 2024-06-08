@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   getAuth,
   onAuthStateChanged,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -17,10 +18,11 @@ interface Props {
 
 interface LoginContextType {
   userData: UserData | null;
-  handleSignOut: () => void;
-  handleSignIn: (email: string, password: string) => void;
-  handleSignInWithGoogle: () => void;
   handleCreateUser: (values: UserData) => void;
+  handleSendResetPasswordEmail: (email: string) => void;
+  handleSignOut: () => void;
+  handleSignInWithGoogle: () => void;
+  handleSignIn: (email: string, password: string) => void;
 }
 
 export const LoginContext = createContext<LoginContextType | null>(null);
@@ -69,6 +71,15 @@ export const LoginProvider = ({ children }: Props) => {
     }
   };
 
+  const handleSendResetPasswordEmail = async (email: string) => {
+    try {
+      const auth = getAuth();
+      await sendPasswordResetEmail(auth, email);
+      console.log("Password reset email sent");
+    } catch (error) {
+      console.error("Error sending password reset email:", error);
+    }
+  };
   const handleSignOut = async () => {
     signOut(auth)
       .then(() => {
@@ -115,6 +126,7 @@ export const LoginProvider = ({ children }: Props) => {
         handleSignInWithGoogle,
         handleSignIn,
         handleCreateUser,
+        handleSendResetPasswordEmail,
       }}
     >
       {children}

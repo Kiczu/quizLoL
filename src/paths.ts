@@ -3,5 +3,6 @@ export const paths = {
     LOGIN: '/login',
     REGISTER: '/register',
     PROFILE: '/profile',
-    DASHBOARD: '/dashboard'
+    DASHBOARD: '/dashboard',
+    RESET_PASSWORD: '/reset-password',
 }
