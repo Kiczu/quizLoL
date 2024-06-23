@@ -4,5 +4,6 @@ export const paths = {
     REGISTER: '/register',
     PROFILE: '/profile',
     DASHBOARD: '/dashboard',
+    RESET_PASSWORD: '/reset-password',
     LORE: '/lore',
 }
