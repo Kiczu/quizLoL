@@ -1,45 +1,21 @@
-import { characterService } from "../../api/characterService";
-import { useEffect, useState } from "react";
-import { Character } from "../../api/types";
-import { Grid, Card } from "@mui/material";
+import { Box, Typography } from "@mui/material";
+import ChampionList from "./ChampionList/ChampionList";
+import SearchBar from "../../components/SearchBar/SearchBar";
+import { useLoreData } from "./useLoreData";
 
 const Lore = () => {
-  const [champions, setChampions] = useState<Character[]>([]);
-
-  useEffect(() => {
-    const fetchChampions = async () => {
-      try {
-        const data = await characterService.getAll();
-        setChampions(data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    fetchChampions();
-  }, []);
+  const { champions, search, handleSearchChange } = useLoreData();
 
   return (
-    <div style={{ padding: "100px 20px" }}>
-      <h1>LORE</h1>
-      <div>
-        <Grid container spacing={2}>
-          {champions.map((champion) => (
-            <Grid item xs={12} md={3} key={champion.id}>
-              <Card className="card">
-                <img
-                  src={`https://ddragon.leagueoflegends.com/cdn/img/champion/splash/${champion.id}_0.jpg`}
-                  alt={champion.name}
-                  loading="lazy"
-                />
-                <h2>{champion.name}</h2>
-                <p>{champion.blurb}</p>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </div>
-    </div>
+    <Box  sx={{ m: {xs: 4, sm: 5, md: 5, lg: 10 } }}>
+      <Typography variant="h4" component="h1">LORE</Typography>
+        <SearchBar
+          initSearch={search}
+          handleSearchChange={handleSearchChange}
+          delay={500}
+        />
+        <ChampionList champions={champions} />
+    </Box>
   );
 };
 
