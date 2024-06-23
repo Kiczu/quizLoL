@@ -10,7 +10,6 @@ import {
   Grid,
   Box,
 } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Form, Formik } from "formik";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
@@ -48,15 +47,13 @@ const initValues: RegistrationData = {
   confirmPassword: "",
 };
 
-const defaultTheme = createTheme();
-
 const RegisterPage = () => {
   const { handleCreateUser } = useAuth();
 
   const handleSubmit = (values: UserData) => handleCreateUser(values);
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -190,7 +187,7 @@ const RegisterPage = () => {
           </Formik>
         </Box>
       </Container>
-    </ThemeProvider>
+    </>
   );
 };
 

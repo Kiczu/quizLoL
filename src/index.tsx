@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { createTheme } from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
 import { LoginProvider } from "./context/LoginContext/LoginContext";
 import { paths } from "./paths";
 import Layout from "./Layout/Layout";
@@ -10,23 +12,27 @@ import RegisterPage from "./views/RegisterPage/RegisterPage";
 import Lore from "./views/Lore/Lore";
 import "./index.css";
 
+const defaultTheme = createTheme();
+
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <LoginProvider>
-      <Router basename="/">
-        <Routes>
-          <Route path={paths.HOME} element={<Layout />}>
-            <Route path={paths.HOME} element={<Home />} />
-            <Route path={paths.LORE} element={<Lore />} />
+      <ThemeProvider theme={defaultTheme}>
+        <Router basename="/">
+          <Routes>
+            <Route path={paths.HOME} element={<Layout />}>
+              <Route path={paths.HOME} element={<Home />} />
+              <Route path={paths.LORE} element={<Lore />} />
 
-            <Route path={paths.LOGIN} element={<LoginPage />} />
-            <Route path={paths.REGISTER} element={<RegisterPage />} />
-          </Route>
-        </Routes>
-      </Router>
+              <Route path={paths.LOGIN} element={<LoginPage />} />
+              <Route path={paths.REGISTER} element={<RegisterPage />} />
+            </Route>
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </LoginProvider>
   </React.StrictMode>
 );

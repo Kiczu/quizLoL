@@ -10,9 +10,7 @@ const Layout = () => {
   }, [pathname]);
   return (
     <>
-      <header>
-        <Navigation />
-      </header>
+      <Navigation />
       <main>
         <Outlet />
       </main>
