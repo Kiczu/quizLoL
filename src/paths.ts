@@ -5,4 +5,5 @@ export const paths = {
     PROFILE: '/profile',
     DASHBOARD: '/dashboard',
     RESET_PASSWORD: '/reset-password',
+    LORE: '/lore',
 }

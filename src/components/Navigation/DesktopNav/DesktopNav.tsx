@@ -1,9 +1,7 @@
 import {
   Box,
   Button,
-  ThemeProvider,
   Typography,
-  createTheme,
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { paths } from "../../../paths";
@@ -16,9 +14,8 @@ interface DesktopNavProps {
   handleCloseNavMenu: () => void;
 }
 const DesktopNav = ({ pages, handleCloseNavMenu }: DesktopNavProps) => {
-  const defaultTheme = createTheme();
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <Typography
         variant="h6"
         noWrap
@@ -43,11 +40,11 @@ const DesktopNav = ({ pages, handleCloseNavMenu }: DesktopNavProps) => {
             onClick={handleCloseNavMenu}
             sx={{ my: 2, color: "white", display: "block" }}
           >
-            <Link to={paths.HOME}>{page.name}</Link>
+            <Link to={page.href}>{page.name}</Link>
           </Button>
         ))}
       </Box>
-    </ThemeProvider>
+    </>
   );
 };
 

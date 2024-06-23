@@ -1,16 +1,13 @@
 import {
   Box,
-  createTheme,
   IconButton,
   Menu,
   MenuItem,
-  ThemeProvider,
   Typography,
 } from "@mui/material";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Link } from "react-router-dom";
 
-const defaultTheme = createTheme();
 
 interface MobileNavProps {
   pages: {
@@ -31,7 +28,7 @@ const MobileNav = ({
   handleOpenNavMenu,
 }: MobileNavProps) => {
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
         <IconButton
           size="large"
@@ -88,7 +85,7 @@ const MobileNav = ({
       >
         LOGO
       </Typography>
-    </ThemeProvider>
+    </>
   );
 };
 

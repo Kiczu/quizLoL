@@ -10,7 +10,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { Form, Formik } from "formik";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
@@ -43,8 +43,6 @@ const initValues: Values = {
   password: "",
 };
 
-const defaultTheme = createTheme();
-
 const LoginPage = () => {
   const { handleSignIn, handleSignInWithGoogle } = useAuth();
 
@@ -53,7 +51,7 @@ const LoginPage = () => {
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
         <Grid
@@ -113,9 +111,7 @@ const LoginPage = () => {
                       value={values.email}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                      error={
-                        (Boolean(touched.email) && Boolean(errors.email))
-                      }
+                      error={Boolean(touched.email) && Boolean(errors.email)}
                       helperText={touched.email && errors.email}
                     />
                     <TextField
@@ -130,7 +126,7 @@ const LoginPage = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       error={
-                        (Boolean(touched.password) && Boolean(errors.password))
+                        Boolean(touched.password) && Boolean(errors.password)
                       }
                       helperText={touched.password && errors.password}
                     />
@@ -169,7 +165,7 @@ const LoginPage = () => {
           </Box>
         </Grid>
       </Grid>
-    </ThemeProvider>
+    </>
   );
 };
 
