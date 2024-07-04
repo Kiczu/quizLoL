@@ -5,7 +5,7 @@ export type ApiResponse = {
     data: ApiData;
 };
 
-export type ApiData = Record<string, Character>;
+export type ApiData = Record<string, ChampionDetails>;
 
 export type User = {
     name: string;
@@ -14,18 +14,15 @@ export type User = {
     password: string;
 }
 
-export type Character = {
+export type ChampionDetails = {
     id: string;
     key: string;
     name: string;
     title: string;
     blurb: string;
-    info: {
-        attack: number;
-        defense: number;
-        magic: number;
-        difficulty: number;
-    };
+    lore: string;
+    partype: string;
+    tags: string[];
     image: {
         full: string;
         sprite: string;
@@ -35,7 +32,25 @@ export type Character = {
         w: number;
         h: number;
     };
-    tags: string[];
+    passive: {
+        description: string;
+        name: string;
+    };
+    spells: [
+        {
+            id: string;
+            cooldown: [number];
+            cooldownBurn: string;
+            cost: [number];
+            costBurn: string;
+            description: string;
+            image: {
+                full: string;
+            }
+            tooltip: string;
+            name: string;
+        }
+    ];
 };
 
 export type UserData = {

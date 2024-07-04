@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { characterService } from "../../api/characterService";
-import { Character } from "../../api/types";
+import { ChampionDetails } from "../../api/types";
 
 export const useLoreData = () => {
-  const [champions, setChampions] = useState<Character[]>([]);
+  const [champions, setChampions] = useState<ChampionDetails[]>([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const useLoreData = () => {
     setSearch(value);
   };
 
-  const filterChampions = (champions: Character[]) => {
+  const filterChampions = (champions: ChampionDetails[]) => {
     return champions.filter((champion) =>
       champion.name.toLowerCase().includes(search.toLowerCase())
     );
