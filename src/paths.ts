@@ -6,4 +6,5 @@ export const paths = {
     DASHBOARD: '/dashboard',
     RESET_PASSWORD: '/reset-password',
     LORE: '/lore',
+    HANGMAN: '/game/hangman',
 }
