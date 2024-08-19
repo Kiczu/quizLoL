@@ -11,6 +11,7 @@ import LoginPage from "./views/LoginPage/LoginPage";
 import RegisterPage from "./views/RegisterPage/RegisterPage";
 import Lore from "./views/Lore/Lore";
 import ForgotPassword from "./views/ForgotPassword/ForgotPassword";
+import Hangman from "./components/Hangman/Hangman";
 import "./index.css";
 
 const defaultTheme = createTheme();
@@ -28,6 +29,7 @@ root.render(
               <Route path={paths.HOME} element={<Home />} />
               <Route path={paths.LOGIN} element={<LoginPage />} />
               <Route path={paths.LORE} element={<Lore />} />
+              <Route path={paths.HANGMAN} element={<Hangman />} />
 
               <Route path={paths.RESET_PASSWORD} element={<ForgotPassword />} />
               <Route path={paths.REGISTER} element={<RegisterPage />} />

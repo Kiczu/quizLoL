@@ -1,10 +1,6 @@
-import {
-  Box,
-  Button,
-  Typography,
-} from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
-import { paths } from "../../../paths";
+import logoQuiz from "../../../assets/images/logo-quiz2.png";
 
 interface DesktopNavProps {
   pages: {
@@ -16,23 +12,17 @@ interface DesktopNavProps {
 const DesktopNav = ({ pages, handleCloseNavMenu }: DesktopNavProps) => {
   return (
     <>
-      <Typography
-        variant="h6"
-        noWrap
-        component="a"
-        href={paths.HOME}
+      <Box
+        component="img"
+        alt="Logo"
+        src={logoQuiz}
         sx={{
+          maxWidth: 80,
+          width: "100%",
           mr: 2,
           display: { xs: "none", md: "flex" },
-          fontFamily: "monospace",
-          fontWeight: 700,
-          letterSpacing: ".3rem",
-          color: "inherit",
-          textDecoration: "none",
         }}
-      >
-        LOGO
-      </Typography>
+      />
       <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
         {pages.map((page) => (
           <Button

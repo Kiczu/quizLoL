@@ -1,13 +1,7 @@
-import {
-  Box,
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { Link } from "react-router-dom";
-
+import logoQuiz from "../../../assets/images/logo-quiz2.png";
 
 interface MobileNavProps {
   pages: {
@@ -29,7 +23,9 @@ const MobileNav = ({
 }: MobileNavProps) => {
   return (
     <>
-      <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
+      <Box
+        sx={{ maxWidth: 50, flexGrow: 1, display: { xs: "flex", md: "none" } }}
+      >
         <IconButton
           size="large"
           aria-label="account of current user"
@@ -67,24 +63,18 @@ const MobileNav = ({
           ))}
         </Menu>
       </Box>
-      <Typography
-        variant="h5"
-        noWrap
-        component="a"
-        href="#app-bar-with-responsive-menu"
+      <Box
+        component="img"
+        alt="Logo"
+        src={logoQuiz}
         sx={{
-          mr: 2,
+          maxWidth: 80,
+          width: "100%",
           display: { xs: "flex", md: "none" },
           flexGrow: 1,
-          fontFamily: "monospace",
-          fontWeight: 700,
-          letterSpacing: ".3rem",
-          color: "inherit",
-          textDecoration: "none",
+          margin: "auto",
         }}
-      >
-        LOGO
-      </Typography>
+      />
     </>
   );
 };
