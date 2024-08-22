@@ -11,7 +11,7 @@ import LoginPage from "./views/LoginPage/LoginPage";
 import RegisterPage from "./views/RegisterPage/RegisterPage";
 import Lore from "./views/Lore/Lore";
 import ForgotPassword from "./views/ForgotPassword/ForgotPassword";
-import Hangman from "./components/Hangman/Hangman";
+import Hangman from "./views/Hangman/Hangman";
 import "./index.css";
 
 const defaultTheme = createTheme();
