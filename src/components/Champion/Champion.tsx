@@ -4,33 +4,7 @@ import { Box, Grid, Tab, Tabs, Typography } from "@mui/material";
 import { characterService } from "../../api/characterService";
 import { ChampionDetails } from "../../api/types";
 
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-}
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    "aria-controls": `simple-tabpanel-${index}`,
-  };
-}
+import CustomTabPanel from "../CustomTabPanel/CustomTabPanel";
 
 const Champion = () => {
   const { id } = useParams<{ id: string }>();
@@ -41,28 +15,29 @@ const Champion = () => {
   const championImage: React.CSSProperties = {
     width: "100%",
   };
-  const championSkills: React.CSSProperties = {
-    display: "block",
-    maxWidth: "64px",
-    maxHeight: "64px",
-  };
+  function a11yProps(index: number) {
+    return {
+      id: `simple-tab-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
+    };
+  }
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   useEffect(() => {
+    const fetchChampion = async (id: string) => {
+      try {
+        const data = await characterService.getChampion(id);
+        setChampion(data);
+        setLoading(false);
+      } catch (error) {
+        console.error(`Failed to fetch champion data ${error}`);
+      }
+    };
     if (id) {
-      characterService
-        .getChampion(id)
-        .then((data) => {
-          setChampion(data);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.error("Failed to fetch champion data", err);
-          setLoading(false);
-        });
+      fetchChampion(id);
     }
   }, [id]);
 
