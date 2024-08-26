@@ -8,5 +8,6 @@ export const paths = {
     RESET_PASSWORD: "/reset-password",
     REGISTER: "/register",
     LORE: "/lore",
+    HANGMAN: "/game/hangman"
   };
   
