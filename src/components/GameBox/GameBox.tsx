@@ -1,48 +1,30 @@
-import { Box, Button } from "@mui/material";
-import { useState } from "react";
+import { Box } from "@mui/material";
+import StartGame from "./StartGame";
+import { useContext } from "react";
+import { GameContext } from "../../context/GameContext/GameContext";
+import { GameState } from "../../api/types";
 
 type Props = {
   title: string;
   children?: React.ReactNode;
 };
 
-enum GameState {
-  NotStarted = "NotStarted",
-  InProgress = "InProgress",
-  Finished = "Finished",
-}
-
-const GameBox = ({children, title}: Props) => {
-  const [gameState, setGameState] = useState<GameState>(GameState.NotStarted);
-  const [gameScore, setgameScore] = useState(0);
-
-  const startGame = () => {
-    setGameState(GameState.InProgress);
-  };
-
-  const endGame = () => {
-    setGameState(GameState.Finished);
-  };
+const GameBox = ({ children, title }: Props) => {
+  const gameContext = useContext(GameContext);
 
   return (
     <Box>
-      <Box border={1} minHeight={200} padding={2} marginTop={10}>
-        {gameState === GameState.NotStarted && (
-          <Box width={"100%"}>
-            <Button onClick={startGame} variant="contained">
-              Rozpocznij grę
-            </Button>
-          </Box>
-        )}
+      <Box>
+        {gameContext?.gameState === GameState.NotStarted && <StartGame />}
 
-        {gameState === GameState.InProgress && (
+        {gameContext?.gameState === GameState.InProgress && (
           <Box width={"100%"}>{children}</Box>
         )}
 
-        {gameState === GameState.Finished && (
+        {gameContext?.gameState === GameState.Finished && (
           <div>
             {/* Tutaj kod do wyświetlania ekranu końcowego */}
-            <p>{`Koniec gry! Twój wynik to: ${gameScore}`} </p>
+            <p>{`Koniec gry! Twój wynik to: ${0}`} </p>
           </div>
         )}
       </Box>

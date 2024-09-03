@@ -84,3 +84,9 @@ export type ChampionDetails = {
         }
     ];
 };
+
+export enum GameState {
+    NotStarted = "NotStarted",
+    InProgress = "InProgress",
+    Finished = "Finished",
+}

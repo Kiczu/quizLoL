@@ -4,6 +4,7 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { LoginProvider } from "./context/LoginContext/LoginContext";
+import { GameProvider } from "./context/GameContext/GameContext";
 import { paths } from "./paths";
 import Layout from "./Layout/Layout";
 import Home from "./views/Home/Home";
@@ -29,8 +30,14 @@ root.render(
               <Route path={paths.HOME} element={<Home />} />
               <Route path={paths.LOGIN} element={<LoginPage />} />
               <Route path={paths.LORE} element={<Lore />} />
-              <Route path={paths.HANGMAN} element={<Hangman />} />
-
+              <Route
+                path={paths.HANGMAN}
+                element={
+                  <GameProvider>
+                    <Hangman />
+                  </GameProvider>
+                }
+              />
               <Route path={paths.RESET_PASSWORD} element={<ForgotPassword />} />
               <Route path={paths.REGISTER} element={<RegisterPage />} />
             </Route>
