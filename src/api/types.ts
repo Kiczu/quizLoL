@@ -71,9 +71,9 @@ export type ChampionDetails = {
     spells: [
         {
             id: string;
-            cooldown: [number];
+            cooldown: number[];
             cooldownBurn: string;
-            cost: [number];
+            cost: number[];
             costBurn: string;
             description: string;
             image: {
