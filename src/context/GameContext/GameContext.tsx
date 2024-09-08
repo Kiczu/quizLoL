@@ -9,15 +9,17 @@ interface GameContextType {
   gameId: string;
   gameScore: number;
   gameState: GameState;
+  isWin : boolean;
   setGameId: (gameId: string) => void;
   handleStartGame: () => void;
-  handleEndGame: () => void;
+  handleEndGame: (points: number) => void;
 }
 
 export const GameContext = createContext<GameContextType>({
   gameId: "",
   gameScore: 0,
   gameState: GameState.NotStarted,
+  isWin: false,
   setGameId: () => {},
   handleStartGame: () => {},
   handleEndGame: () => {},
@@ -32,9 +34,9 @@ export const GameProvider = ({ children }: Props) => {
     setGameState(GameState.InProgress);
   };
 
-  const handleEndGame = () => {
+  const handleEndGame = (points: number) => {
     setGameState(GameState.Finished);
-    setgameScore(0);
+    setgameScore(points);
   };
 
   return (
@@ -43,6 +45,7 @@ export const GameProvider = ({ children }: Props) => {
         gameId,
         gameScore,
         gameState,
+        isWin: gameScore > 0,
         setGameId,
         handleStartGame,
         handleEndGame,

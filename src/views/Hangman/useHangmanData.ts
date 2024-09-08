@@ -4,12 +4,14 @@ import { characterService } from '../../api/characterService';
 import { GameContext } from '../../context/GameContext/GameContext';
 
 const maxAttempts = 6;
+const winBonus = 10;
 
 const useHangmanData = () => {
     const [data, setData] = useState<null | Character[]>(null);
     const [letters, setLetters] = useState<{ isCorrect: boolean, value: string }[]>([]);
     const [wrongGuesses, setWrongGuesses] = useState(0);
     const [inputLetter, setInputLetter] = useState("");
+    const [points, setPoints] = useState(0);
 
     const hangmanContext = useContext(GameContext);
 
@@ -29,10 +31,12 @@ const useHangmanData = () => {
 
     useEffect(() => {
         const isGameOver = wrongGuesses === maxAttempts;
-        const isWordGuessed = letters.length > 0 && letters.every(({ isCorrect }) => isCorrect);
+        const isWin = letters.length > 0 && letters.every(({ isCorrect }) => isCorrect);
 
-        if (isGameOver || isWordGuessed) {
-            hangmanContext?.handleEndGame();
+        if (isGameOver) {
+            hangmanContext?.handleEndGame(points);
+        } else if (isWin) {
+            hangmanContext?.handleEndGame(points + winBonus);
         }
     }, [wrongGuesses, letters, hangmanContext])
 
@@ -53,6 +57,7 @@ const useHangmanData = () => {
         const isCorrect = letters.some(({ value }) => value === letter);
         if (isCorrect) {
             changeLetter(letter);
+            setPoints((prevPoints) => prevPoints + 1);
         } else {
             userWrongGuess();
         }

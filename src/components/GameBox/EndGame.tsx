@@ -5,6 +5,7 @@ interface Props {
 }
 
 const EndGame = ({ score }: Props) => {
+  
   return (
     <Box
       sx={{

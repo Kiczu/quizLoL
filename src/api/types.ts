@@ -7,11 +7,12 @@ export type ApiResponse = {
 
 export type ApiData = Record<string, Character>;
 
-export type User = {
+export type UserDetails = {
     name: string;
     surname: string;
     email: string;
     password: string;
+    totalPoints: number;
 }
 
 export type Character = {
