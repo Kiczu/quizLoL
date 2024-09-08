@@ -11,7 +11,7 @@ type Props = {
 };
 
 const GameBox = ({ children, title }: Props) => {
-  const { gameState, gameScore } = useContext(GameContext);
+  const { gameState, gameScore, isWin } = useContext(GameContext);
 
   return (
     <Box>
@@ -21,7 +21,9 @@ const GameBox = ({ children, title }: Props) => {
         {gameState === GameState.InProgress && (
           <Box width={"100%"}>{children}</Box>
         )}
-        {gameState === GameState.Finished && <EndGame score={gameScore} />}
+        {gameState === GameState.Finished && (
+          <EndGame score={gameScore} isWin={isWin} />
+        )}
       </Box>
     </Box>
   );

@@ -2,10 +2,10 @@ import { Box, Button, Typography } from "@mui/material";
 
 interface Props {
   score: number;
+  isWin: boolean;
 }
 
-const EndGame = ({ score }: Props) => {
-  
+const EndGame = ({ score, isWin }: Props) => {
   return (
     <Box
       sx={{
@@ -16,7 +16,16 @@ const EndGame = ({ score }: Props) => {
         height: "100vh",
       }}
     >
-      <Typography component={"h1"}>Game Over</Typography>
+      {!isWin ? (
+        <Typography component={"h1"}>Game Over</Typography>
+      ) : (
+        <>
+          <Typography component={"h1"}>You win!</Typography>
+          <Typography component={"p"}>
+            We give you extra points for winning!
+          </Typography>
+        </>
+      )}
       <Typography component={"p"}>Your score is: {score}</Typography>
       <Typography component={"p"}>
         You can check your total score

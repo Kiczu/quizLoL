@@ -12,8 +12,11 @@ const useHangmanData = () => {
     const [wrongGuesses, setWrongGuesses] = useState(0);
     const [inputLetter, setInputLetter] = useState("");
     const [points, setPoints] = useState(0);
+    const [isWin, setIsWin] = useState(false);
 
     const hangmanContext = useContext(GameContext);
+    const isGameOver = wrongGuesses === maxAttempts;
+    const isAllAnswerCorrect = letters.length > 0 && letters.every(({ isCorrect }) => isCorrect);
 
     useEffect(() => {
         characterService.getAll().then(setData);
@@ -30,13 +33,11 @@ const useHangmanData = () => {
     }, [data]);
 
     useEffect(() => {
-        const isGameOver = wrongGuesses === maxAttempts;
-        const isWin = letters.length > 0 && letters.every(({ isCorrect }) => isCorrect);
-
         if (isGameOver) {
-            hangmanContext?.handleEndGame(points);
-        } else if (isWin) {
-            hangmanContext?.handleEndGame(points + winBonus);
+            hangmanContext?.handleEndGame(points, isWin);
+        } else if (isAllAnswerCorrect) {
+            setIsWin(true);
+            hangmanContext?.handleEndGame(points + winBonus, isWin);
         }
     }, [wrongGuesses, letters, hangmanContext])
 
@@ -72,7 +73,7 @@ const useHangmanData = () => {
         setWrongGuesses((prevWrongGuesses) => prevWrongGuesses + 1);
     };
 
-    return { inputLetter, letters, wrongGuesses, changeLetter, handleLetterChange, userGuess, resetWrongGuesses };
+    return { inputLetter, letters, wrongGuesses, isWin, changeLetter, handleLetterChange, userGuess, resetWrongGuesses };
 }
 
 export default useHangmanData;

@@ -9,10 +9,10 @@ interface GameContextType {
   gameId: string;
   gameScore: number;
   gameState: GameState;
-  isWin : boolean;
+  isWin: boolean;
   setGameId: (gameId: string) => void;
+  handleEndGame: (points: number, isWin: boolean) => void;
   handleStartGame: () => void;
-  handleEndGame: (points: number) => void;
 }
 
 export const GameContext = createContext<GameContextType>({
@@ -29,14 +29,16 @@ export const GameProvider = ({ children }: Props) => {
   const [gameState, setGameState] = useState<GameState>(GameState.NotStarted);
   const [gameScore, setgameScore] = useState<number>(0);
   const [gameId, setGameId] = useState<string>("");
+  const [isWin, setIsWin] = useState<boolean>(false);
 
   const handleStartGame = () => {
     setGameState(GameState.InProgress);
   };
 
-  const handleEndGame = (points: number) => {
+  const handleEndGame = (points: number, isWin: boolean) => {
     setGameState(GameState.Finished);
     setgameScore(points);
+    setIsWin(isWin);
   };
 
   return (
@@ -45,7 +47,7 @@ export const GameProvider = ({ children }: Props) => {
         gameId,
         gameScore,
         gameState,
-        isWin: gameScore > 0,
+        isWin,
         setGameId,
         handleStartGame,
         handleEndGame,
