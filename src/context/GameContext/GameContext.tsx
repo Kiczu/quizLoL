@@ -29,7 +29,6 @@ export const GameProvider = ({ children }: Props) => {
   const [gameId, setGameId] = useState<string>("");
 
   const handleStartGame = () => {
-    debugger
     setGameState(GameState.InProgress);
   };
 
