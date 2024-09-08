@@ -38,7 +38,6 @@ const Hangman = () => {
               </Box>
             </Grid>
           </Grid>
-
           <Grid item xs={12} md={6}>
             <HangmanSvg wrongGuesses={wrongGuesses} />
           </Grid>

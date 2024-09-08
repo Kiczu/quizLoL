@@ -1,8 +1,9 @@
-import { Box } from "@mui/material";
-import StartGame from "./StartGame";
 import { useContext } from "react";
-import { GameContext } from "../../context/GameContext/GameContext";
+import { Box } from "@mui/material";
 import { GameState } from "../../api/types";
+import { GameContext } from "../../context/GameContext/GameContext";
+import StartGame from "./StartGame";
+import EndGame from "./EndGame";
 
 type Props = {
   title: string;
@@ -10,23 +11,17 @@ type Props = {
 };
 
 const GameBox = ({ children, title }: Props) => {
-  const gameContext = useContext(GameContext);
+  const { gameState, gameScore } = useContext(GameContext);
 
   return (
     <Box>
       <Box>
-        {gameContext?.gameState === GameState.NotStarted && <StartGame />}
+        {gameState === GameState.NotStarted && <StartGame />}
 
-        {gameContext?.gameState === GameState.InProgress && (
+        {gameState === GameState.InProgress && (
           <Box width={"100%"}>{children}</Box>
         )}
-
-        {gameContext?.gameState === GameState.Finished && (
-          <div>
-            {/* Tutaj kod do wyświetlania ekranu końcowego */}
-            <p>{`Koniec gry! Twój wynik to: ${0}`} </p>
-          </div>
-        )}
+        {gameState === GameState.Finished && <EndGame score={gameScore} />}
       </Box>
     </Box>
   );
