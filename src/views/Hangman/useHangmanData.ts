@@ -1,15 +1,9 @@
 import { Character } from './../../api/types';
-import { useEffect, useState } from "react";
-import { ApiResponse } from "../../api/types";
-import { api } from '../../api/api';
+import { useContext, useEffect, useState } from "react";
+import { characterService } from '../../api/characterService';
+import { GameContext } from '../../context/GameContext/GameContext';
 
 const maxAttempts = 6;
-
-const getAll = () => {
-    return api
-        .get<ApiResponse>('https://ddragon.leagueoflegends.com/cdn/14.10.1/data/en_US/champion.json')
-        .then((data) => Object.values(data.data));
-}
 
 const useHangmanData = () => {
     const [data, setData] = useState<null | Character[]>(null);
@@ -17,8 +11,10 @@ const useHangmanData = () => {
     const [wrongGuesses, setWrongGuesses] = useState(0);
     const [inputLetter, setInputLetter] = useState("");
 
+    const hangmanContext = useContext(GameContext);
+
     useEffect(() => {
-        getAll().then(setData);
+        characterService.getAll().then(setData);
     }, []);
 
     useEffect(() => {
@@ -30,6 +26,15 @@ const useHangmanData = () => {
             );
         }
     }, [data]);
+
+    useEffect(() => {
+        const isGameOver = wrongGuesses === maxAttempts;
+        const isWordGuessed = letters.length > 0 && letters.every(({ isCorrect }) => isCorrect);
+
+        if (isGameOver || isWordGuessed) {
+            hangmanContext?.handleEndGame();
+        }
+    }, [wrongGuesses, letters, hangmanContext])
 
     const changeLetter = (letter: string) => {
         setLetters((prevLetters) => prevLetters.map((item) => {
@@ -55,13 +60,11 @@ const useHangmanData = () => {
     };
     const resetWrongGuesses = () => {
         setWrongGuesses(0);
+        setLetters(letters.map(({ value }) => ({ isCorrect: false, value })));
     };
 
     const userWrongGuess = () => {
         setWrongGuesses((prevWrongGuesses) => prevWrongGuesses + 1);
-        if (wrongGuesses >= maxAttempts) {
-
-        }
     };
 
     return { inputLetter, letters, wrongGuesses, changeLetter, handleLetterChange, userGuess, resetWrongGuesses };
