@@ -39,7 +39,7 @@ const useHangmanData = () => {
             setIsWin(true);
             hangmanContext?.handleEndGame(points + winBonus, isWin);
         }
-    }, [wrongGuesses, letters, hangmanContext])
+    }, [wrongGuesses, letters, hangmanContext, isGameOver, isAllAnswerCorrect, points, isWin]);
 
     const changeLetter = (letter: string) => {
         setLetters((prevLetters) => prevLetters.map((item) => {
