@@ -9,10 +9,10 @@ const winBonus = 10;
 const useHangmanData = () => {
     const [data, setData] = useState<null | Character[]>(null);
     const [letters, setLetters] = useState<{ isCorrect: boolean, value: string }[]>([]);
-    const [wrongGuesses, setWrongGuesses] = useState(0);
-    const [inputLetter, setInputLetter] = useState("");
-    const [points, setPoints] = useState(0);
-    const [isWin, setIsWin] = useState(false);
+    const [wrongGuesses, setWrongGuesses] = useState<number>(0);
+    const [inputLetter, setInputLetter] = useState<string>("");
+    const [points, setPoints] = useState<number>(0);
+    const [isWin, setIsWin] = useState<boolean>(false);
 
     const hangmanContext = useContext(GameContext);
     const isGameOver = wrongGuesses === maxAttempts;
@@ -73,7 +73,7 @@ const useHangmanData = () => {
         setWrongGuesses((prevWrongGuesses) => prevWrongGuesses + 1);
     };
 
-    return { inputLetter, letters, wrongGuesses, isWin, changeLetter, handleLetterChange, userGuess, resetWrongGuesses };
+    return { inputLetter, letters, wrongGuesses, isWin, maxAttempts, changeLetter, handleLetterChange, userGuess, resetWrongGuesses };
 }
 
 export default useHangmanData;

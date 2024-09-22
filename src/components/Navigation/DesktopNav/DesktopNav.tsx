@@ -18,8 +18,9 @@ const DesktopNav = ({ pages, handleCloseNavMenu }: DesktopNavProps) => {
         src={logoQuiz}
         sx={{
           maxWidth: 80,
-          width: "100%",
+          width: "90%",
           mr: 2,
+          p: 1,
           display: { xs: "none", md: "flex" },
         }}
       />
