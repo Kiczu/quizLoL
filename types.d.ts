@@ -4,11 +4,12 @@ declare module "*.svg" {
     const src: string;
     export default src;
   }
-  declare module "*.png" {
-    const value: any;
-    export = value;
- }
  declare module '*.webp' {
   const src: string;
   export default src;
 }
+declare module "*.png";
+declare module "*.svg";
+declare module "*.jpeg";
+declare module "*.jpg";
+declare module "*.gif";

@@ -9,16 +9,16 @@ const Keyboard = ({ userGuess }: any) => {
             variant="outlined"
             onClick={() => userGuess(String.fromCharCode(65 + i))}
             sx={{
-              color: "#C89B3C",
-              borderColor: "#C89B3C",
+              color: "#F0E6D2",
+              borderColor: "#C8AA6E",
               minWidth: "40px",
               minHeight: "40px",
               fontSize: "1rem",
               textTransform: "none",
               "&:hover": {
-                backgroundColor: "#C89B3C",
-                borderColor: "#C89B3C",
-                color: "#010A13",
+                backgroundColor: "#C8AA6E",
+                borderColor: "#C8AA6E",
+                color: "#32281E",
               },
             }}
           >
