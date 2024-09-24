@@ -8,4 +8,6 @@ export const paths = {
     RESET_PASSWORD: '/reset-password',
     LORE: '/lore',
     HANGMAN: '/game/hangman',
+    CHAMPION: "/champion",
+    CHAMPION_DETAIL: "/champions/:id",
 }

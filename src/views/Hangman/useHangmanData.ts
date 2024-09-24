@@ -1,4 +1,4 @@
-import { Character } from './../../api/types';
+import { ChampionDetails } from "../../api/types";
 import { useContext, useEffect, useState } from "react";
 import { characterService } from '../../api/characterService';
 import { GameContext } from '../../context/GameContext/GameContext';
@@ -7,7 +7,7 @@ const maxAttempts = 6;
 const winBonus = 10;
 
 const useHangmanData = () => {
-    const [data, setData] = useState<null | Character[]>(null);
+    const [data, setData] = useState<null | ChampionDetails[]>(null);
     const [letters, setLetters] = useState<{ isCorrect: boolean, value: string }[]>([]);
     const [wrongGuesses, setWrongGuesses] = useState<number>(0);
     const [inputLetter, setInputLetter] = useState<string>("");

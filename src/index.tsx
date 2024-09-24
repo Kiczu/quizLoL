@@ -8,6 +8,7 @@ import { GameProvider } from "./context/GameContext/GameContext";
 import { paths } from "./paths";
 import Layout from "./Layout/Layout";
 import Home from "./views/Home/Home";
+import Champion from "./components/Champion/Champion";
 import LoginPage from "./views/LoginPage/LoginPage";
 import RegisterPage from "./views/RegisterPage/RegisterPage";
 import Lore from "./views/Lore/Lore";
@@ -28,6 +29,7 @@ root.render(
           <Routes>
             <Route path={paths.HOME} element={<Layout />}>
               <Route path={paths.HOME} element={<Home />} />
+              <Route path={paths.CHAMPION_DETAIL} element={<Champion />} />
               <Route path={paths.LOGIN} element={<LoginPage />} />
               <Route path={paths.LORE} element={<Lore />} />
               <Route
@@ -40,6 +42,8 @@ root.render(
               />
               <Route path={paths.RESET_PASSWORD} element={<ForgotPassword />} />
               <Route path={paths.REGISTER} element={<RegisterPage />} />
+
+              <Route path={paths.LORE} element={<Lore />} />
             </Route>
           </Routes>
         </Router>

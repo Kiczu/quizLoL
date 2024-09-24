@@ -5,7 +5,7 @@ export type ApiResponse = {
     data: ApiData;
 };
 
-export type ApiData = Record<string, Character>;
+export type ApiData = Record<string, ChampionDetails>;
 
 export type UserDetails = {
     name: string;
