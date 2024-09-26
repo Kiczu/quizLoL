@@ -1,6 +1,7 @@
 import { ImageList, ImageListItem } from "@mui/material";
 import minion from "../../../assets/images/minion.webp";
 import ImpactGif from "../../../assets/animations/impact.gif";
+import { ImpactAnimation, MinionImg } from "../hangmanStyles";
 
 type Props = {
   maxAttempts: number;
@@ -17,26 +18,18 @@ const Lives = ({ maxAttempts, wrongGuesses }: Props) => {
             position: "relative",
           }}
         >
-          <img
+          <MinionImg
+            className="MuiImageListItem-img"
+            isActive={wrongGuesses > i}
             src={minion}
             alt=""
             key={i}
-            style={{
-              opacity: wrongGuesses > i ? 0.5 : 1,
-              filter: wrongGuesses > i ? "grayscale(100%)" : "grayscale(0%)",
-              zIndex: 1,
-            }}
           />
           {wrongGuesses > i && (
-            <img
+            <ImpactAnimation
+              className="MuiImageListItem-img"
               src={ImpactGif}
               alt=""
-              style={{
-                position: "absolute",
-                bottom: 0,
-                animation: `impact 1s ease-in-out forwards`,
-                zIndex: 0,
-              }}
             />
           )}
         </ImageListItem>
