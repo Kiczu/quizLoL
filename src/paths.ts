@@ -1,13 +1,13 @@
 export const paths = {
-    HOME: "/",
-    PROFILE: "/profile",
-    DASHBOARD: "/dashboard",
+    HOME: '/',
+    LOGIN: '/login',
+    REGISTER: '/register',
+    PROFILE: '/profile',
+    RANKING: '/ranking',
+    DASHBOARD: '/dashboard',
+    RESET_PASSWORD: '/reset-password',
+    LORE: '/lore',
+    HANGMAN: '/game/hangman',
     CHAMPION: "/champion",
     CHAMPION_DETAIL: "/champions/:id",
-    LOGIN: "/login",
-    RESET_PASSWORD: "/reset-password",
-    REGISTER: "/register",
-    LORE: "/lore",
-    HANGMAN: "/game/hangman"
-  };
-  
+}

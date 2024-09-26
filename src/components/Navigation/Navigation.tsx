@@ -77,7 +77,7 @@ const Navigation = () => {
   const visibleSetting = userData ? settings : settingsNotLoggedIn;
 
   return (
-    <AppBar className="app-bar">
+    <AppBar className="app-bar" sx={{ backgroundColor: "#0A1428" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <MobileNav
