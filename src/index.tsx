@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { createTheme } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { LoginProvider } from "./context/LoginContext/LoginContext";
 import { paths } from "./paths";
+import { theme } from "./theme/theme";
 import Layout from "./Layout/Layout";
 import Home from "./views/Home/Home";
 import Champion from "./components/Champion/Champion";
@@ -15,15 +15,13 @@ import ForgotPassword from "./views/ForgotPassword/ForgotPassword";
 import Hangman from "./components/Hangman/Hangman";
 import "./index.css";
 
-const defaultTheme = createTheme();
-
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <LoginProvider>
-      <ThemeProvider theme={defaultTheme}>
+      <ThemeProvider theme={theme}>
         <Router basename="/">
           <Routes>
             <Route path={paths.HOME} element={<Layout />}>
