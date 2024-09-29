@@ -12,7 +12,8 @@ export const theme = createTheme({
             main: colors.secondary,
         },
         background: {
-            default: colors.background,
+            default: colors.grey3,
+            paper: colors.backgroundSecondary,
         },
         text: {
             primary: colors.textPrimary,
@@ -26,4 +27,66 @@ export const theme = createTheme({
         body1: typography.body1,
     },
     spacing: spacing.medium,
+    components: {
+        MuiTextField: {
+            variants: [
+                {
+                    props: { variant: 'outlined' },
+                    style: {
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: colors.gold4,
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: colors.gold4,
+                            },
+                            '& .MuiInputBase-adornedEnd': {
+                                backgroundColor: 'transparent',
+                            },
+                        },
+                    },
+                },
+                {
+                    props: { variant: 'filled' },
+                    style: {
+                        '& .MuiOutlinedInput-root': {
+                            '& fieldset': {
+                                borderColor: colors.gold4,
+                            },
+                            '&.Mui-focused fieldset': {
+                                borderColor: colors.gold4,
+                            },
+                            '& .MuiInputBase-adornedEnd': {
+                                backgroundColor: colors.background,
+                            },
+                        },
+                    },
+                },
+            ],
+        },
+        MuiButton: {
+            variants: [
+                {
+                    props: { variant: 'contained' },
+                    style: {
+                        backgroundColor: colors.gold4,
+                        color: colors.gold1,
+                        '&:hover': {
+                            backgroundColor: colors.gold3,
+                        },
+                    },
+                },
+                {
+                    props: { variant: 'outlined' },
+                    style: {
+                        borderColor: colors.gold4,
+                        color: colors.gold1,
+                        '&:hover': {
+                            borderColor: colors.gold3,
+                        },
+                    },
+                },
+            ],
+        },
+    },
 });
