@@ -28,9 +28,9 @@ const LoginWithGooglebutton = styled(Button)({
 const loginSchema = yup.object().shape({
   email: yup
     .string()
-    .email("Wprowadź poprawny adres E-Mail")
-    .required("E-Mail jest wymagany"),
-  password: yup.string().required("Hasło jest wymagane"),
+    .email("Please enter a valid email")
+    .required("E-Mail is required"),
+  password: yup.string().required("Password is required"),
 });
 
 interface Values {
@@ -83,7 +83,7 @@ const LoginPage = () => {
           >
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
             <Typography component="h1" variant="h5">
-              Zaloguj się
+              Sign in
             </Typography>
             <Formik
               initialValues={initValues}
@@ -104,7 +104,7 @@ const LoginPage = () => {
                       margin="normal"
                       fullWidth
                       id="email"
-                      label="Adres e-mail"
+                      label="E-Mail"
                       name="email"
                       autoComplete="email"
                       autoFocus
@@ -118,7 +118,7 @@ const LoginPage = () => {
                       margin="normal"
                       fullWidth
                       name="password"
-                      label="Hasło"
+                      label="Password"
                       type="password"
                       id="password"
                       autoComplete="current-password"
@@ -141,17 +141,17 @@ const LoginPage = () => {
                     <Grid container>
                       <Grid item xs>
                         <Link href={paths.RESET_PASSWORD} variant="body2">
-                          Zapomniałeś hasła?
+                          Forgot password?
                         </Link>
                       </Grid>
                       <Grid item>
                         <Link href={paths.REGISTER} variant="body2">
-                          {"Nie masz konta? Zarejestruj się"}
+                          Don't have an account? Sign Up
                         </Link>
                       </Grid>
                     </Grid>
                     <Box m={2} mx={0}>
-                      Lub zaloguj się za pomocą:
+                      Or login with:
                     </Box>
                     <Grid justifyContent="center">
                       <LoginWithGooglebutton onClick={handleSignInWithGoogle}>
