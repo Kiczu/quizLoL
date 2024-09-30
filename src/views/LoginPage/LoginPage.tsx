@@ -101,7 +101,9 @@ const LoginPage = () => {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       error={Boolean(touched.email) && Boolean(errors.email)}
-                      helperText={touched.email && errors.email}
+                      helperText={
+                        touched.email && errors.email ? errors.email : " "
+                      }
                     />
                     <TextField
                       margin="normal"
@@ -117,13 +119,17 @@ const LoginPage = () => {
                       error={
                         Boolean(touched.password) && Boolean(errors.password)
                       }
-                      helperText={touched.password && errors.password}
+                      helperText={
+                        touched.password && errors.password
+                          ? errors.password
+                          : " "
+                      }
                     />
                     <Button
                       type="submit"
                       fullWidth
                       variant="contained"
-                      sx={{ mt: 3, mb: 2 }}
+                      sx={{ mb: 2 }}
                     >
                       Sign In
                     </Button>
