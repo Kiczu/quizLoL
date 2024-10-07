@@ -13,6 +13,7 @@ import {
 import { Form, Formik } from "formik";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
+import { getRandomImage } from "./loginPage.utils";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -26,6 +27,7 @@ interface Values {
   email: string;
   password: string;
 }
+
 
 const initValues: Values = {
   email: "",
@@ -50,7 +52,7 @@ const LoginPage = () => {
           md={7}
           sx={{
             backgroundImage:
-              "url(https://source.unsplash.com/random?wallpapers)",
+              `url(${getRandomImage()})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"

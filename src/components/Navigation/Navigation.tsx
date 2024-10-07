@@ -78,7 +78,6 @@ const Navigation = () => {
 
   return (
     <AppBar
-      className="app-bar"
       sx={{ position: "sticky", backgroundColor: "#0A1428" }}
     >
       <Container maxWidth="xl">
