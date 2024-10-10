@@ -11,6 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Form, Formik } from "formik";
+import { getRandomImage } from "./loginPage.utils";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { paths } from "../../paths";
 
@@ -49,8 +50,7 @@ const LoginPage = () => {
           sm={4}
           md={7}
           sx={{
-            backgroundImage:
-              "url(https://source.unsplash.com/random?wallpapers)",
+            backgroundImage: `url(${getRandomImage()})`,
             backgroundRepeat: "no-repeat",
             backgroundColor: (t) =>
               t.palette.mode === "light"
