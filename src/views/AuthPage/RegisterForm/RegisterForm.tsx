@@ -6,10 +6,13 @@ import {
   Typography,
   Grid,
   Box,
+  Link,
 } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import { Form, Formik } from "formik";
 import { useAuth } from "../../../context/LoginContext/LoginContext";
 import type { UserData } from "../../../api/types";
+import { paths } from "../../../paths";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("Imię jest wymagane"),
@@ -175,6 +178,18 @@ const RegisterForm = () => {
           </Form>
         )}
       </Formik>
+      <Grid container>
+        <Grid item xs>
+          <Link component={RouterLink} to={paths.RESET_PASSWORD}>
+            Forgot password?
+          </Link>
+        </Grid>
+        <Grid item>
+          <Link component={RouterLink} to={paths.LOGIN}>
+            Have an account? Sign in
+          </Link>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

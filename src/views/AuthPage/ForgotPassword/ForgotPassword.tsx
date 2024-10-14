@@ -1,7 +1,9 @@
 import * as yup from "yup";
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography, Link } from "@mui/material";
 import { Form, Formik } from "formik";
 import { useAuth } from "../../../context/LoginContext/LoginContext";
+import { Link as RouterLink } from "react-router-dom";
+import { paths } from "../../../paths";
 
 const emailSchema = yup.object().shape({
   email: yup
@@ -76,6 +78,18 @@ const ForgotPassword = () => {
           </Form>
         )}
       </Formik>
+      <Grid container>
+        <Grid item xs>
+          <Link component={RouterLink} to={paths.LOGIN}>
+            Back to login
+          </Link>
+        </Grid>
+        <Grid item>
+          <Link component={RouterLink} to={paths.REGISTER}>
+            Don't have an account? Sign up
+          </Link>
+        </Grid>
+      </Grid>
     </Box>
   );
 };

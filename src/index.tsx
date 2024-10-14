@@ -12,6 +12,9 @@ import Champion from "./components/Champion/Champion";
 import AuthPage from "./views/AuthPage/AuthPage";
 import Lore from "./views/Lore/Lore";
 import Hangman from "./views/Hangman/Hangman";
+import LoginForm from "./views/AuthPage/LoginForm/LoginForm";
+import RegisterForm from "./views/AuthPage/RegisterForm/RegisterForm";
+import ForgotPassword from "./views/AuthPage/ForgotPassword/ForgotPassword";
 import "./index.css";
 
 const root = ReactDOM.createRoot(
@@ -34,7 +37,14 @@ root.render(
                   </GameProvider>
                 }
               />
-              <Route path={paths.AUTH + "/*"} element={<AuthPage />} />
+              <Route path={paths.AUTH} element={<AuthPage />}>
+                <Route path={paths.LOGIN} element={<LoginForm />} />
+                <Route path={paths.REGISTER} element={<RegisterForm />} />
+                <Route
+                  path={paths.RESET_PASSWORD}
+                  element={<ForgotPassword />}
+                />
+              </Route>
 
               <Route path={paths.LORE} element={<Lore />} />
             </Route>

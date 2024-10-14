@@ -1,7 +1,17 @@
 import * as yup from "yup";
-import { Avatar, Button, TextField, Box, Typography } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  TextField,
+  Box,
+  Typography,
+  Grid,
+  Link,
+} from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 import { Form, Formik } from "formik";
 import { useAuth } from "../../../context/LoginContext/LoginContext";
+import { paths } from "../../../paths";
 
 const loginSchema = yup.object().shape({
   email: yup
@@ -29,13 +39,13 @@ const LoginForm = () => {
   };
 
   return (
-      <Box
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
+    <Box
+      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
+    >
+      <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}></Avatar>
+      <Typography component="h1" variant="h5">
+        Sign in
+      </Typography>
       <Formik
         initialValues={initValues}
         onSubmit={handleSubmit}
@@ -93,6 +103,18 @@ const LoginForm = () => {
           </Form>
         )}
       </Formik>
+      <Grid container>
+        <Grid item xs>
+          <Link component={RouterLink} to={paths.RESET_PASSWORD}>
+            Forgot password?
+          </Link>
+        </Grid>
+        <Grid item>
+          <Link component={RouterLink} to={paths.REGISTER}>
+            Don't have an account? Sign up
+          </Link>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
