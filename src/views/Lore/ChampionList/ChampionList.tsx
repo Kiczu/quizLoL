@@ -4,7 +4,7 @@ import { ChampionDetails } from "../../../api/types";
 import { ChampionCard } from "../../../muiComponentsStyles";
 
 const ChampionList = ({ champions }: { champions: ChampionDetails[] }) => {
-  const championImage: React.CSSProperties = {
+  const championImage = {
     width: "100%",
   };
 
