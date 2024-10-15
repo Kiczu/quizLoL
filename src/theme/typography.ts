@@ -1,10 +1,13 @@
+import { colors } from "./colors";
+
 export const typography = {
     fontFamily: "'Roboto', sans-serif",
     fontSize: 14,
     h1: {
         fontSize: "2.5rem",
-        fontWeight: 600,
+        fontWeight: 400,
         lineHeight: 1.2,
+        color: `${colors.gold2}`,
     },
     h2: {
         fontSize: "2rem",

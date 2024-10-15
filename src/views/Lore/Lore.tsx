@@ -21,12 +21,13 @@ const Lore = () => {
     >
       <Box
         sx={{
+          minHeight: "100vh",
           backdropFilter: "blur(4px)",
           backgroundColor: "rgba(10, 20, 40 ,0.6)",
           padding: "20px 80px",
         }}
       >
-        <Typography variant="h4" component="h1">
+        <Typography variant="h1" component="h1">
           LORE
         </Typography>
         <SearchBar
