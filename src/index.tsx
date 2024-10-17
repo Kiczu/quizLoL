@@ -15,6 +15,7 @@ import Hangman from "./views/Hangman/Hangman";
 import LoginForm from "./views/AuthPage/LoginForm/LoginForm";
 import RegisterForm from "./views/AuthPage/RegisterForm/RegisterForm";
 import ForgotPassword from "./views/AuthPage/ForgotPassword/ForgotPassword";
+import Ranking from "./views/Ranking/Ranking";
 import "./index.css";
 
 const root = ReactDOM.createRoot(
@@ -29,6 +30,7 @@ root.render(
             <Route path={paths.HOME} element={<Layout />}>
               <Route path={paths.HOME} element={<Home />} />
               <Route path={paths.CHAMPION_DETAIL} element={<Champion />} />
+              <Route path={paths.RANKING} element={<Ranking />} />
               <Route
                 path={paths.HANGMAN}
                 element={
