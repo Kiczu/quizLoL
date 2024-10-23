@@ -1,5 +1,5 @@
-import { ChampionDetails } from "../../api/types";
 import { useContext, useEffect, useState } from "react";
+import { ChampionDetails } from "../../api/types";
 import { characterService } from '../../services/characterService';
 import { GameContext } from '../../context/GameContext/GameContext';
 

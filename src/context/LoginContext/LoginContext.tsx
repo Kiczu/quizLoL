@@ -8,8 +8,8 @@ import {
   signInWithPopup,
   signOut,
 } from "firebase/auth";
-import { auth, createUser, db, provider } from "../../api/firebase/firebse";
 import { doc, getDoc } from "firebase/firestore";
+import { auth, createUser, db, provider } from "../../api/firebase/firebse";
 import { UserDataResponseRegister } from "../../api/types";
 
 interface Props {

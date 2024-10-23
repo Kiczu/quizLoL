@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState } from "react";
-import { GameState } from "../../api/types";
 import { getAuth } from "firebase/auth";
+import { GameState } from "../../api/types";
 import { saveUserScore } from "../../api/firebase/firebse";
 
 interface Props {
