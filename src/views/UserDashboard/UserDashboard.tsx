@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   Box,
   Grid,
@@ -10,8 +11,15 @@ import {
   Container,
 } from "@mui/material";
 import { colors } from "../../theme/colors";
+import { useAuth } from "../../context/LoginContext/LoginContext";
 
 const UserDashboard = () => {
+  const { userData } = useAuth();
+
+  useEffect(() => {
+    console.log(userData);
+  }, []);
+
   return (
     <Box
       sx={{

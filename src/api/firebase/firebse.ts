@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, collection, getDocs, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -17,16 +17,36 @@ export const auth = getAuth();
 
 export const createUser = async ({ id, ...userData }: any) => {
     await setDoc(doc(db, "users", id), userData);
-  };
+};
 
-export const getJinx = async () => {
-    const ref = doc(db, 'champions', 'mQTzrtYjpdVEZDZxWmQ6');
-    const champion = await getDoc(ref);
+export const saveUserScore = async (userId: string, gameId: string, score: number) => {
+    const scoresRef = doc(db, "scores", userId);
+    const scoreSnap = await getDoc(scoresRef);
 
-    const ref2 = collection(db, 'champions');
-    const champions = await getDocs(ref2);
+    let newScore = score;
+    let totalPoints = score;
 
-    champions.forEach(el => {
-        console.log(el.data());
-    })
-} 
+    if (scoreSnap.exists()) {
+        const existingScores = scoreSnap.data();
+
+        if (existingScores[gameId]) {
+            newScore += existingScores[gameId];
+        }
+        totalPoints += existingScores[gameId];
+    }
+
+    await setDoc(scoresRef, {
+        [gameId]: newScore,
+        totalPoints: totalPoints,
+    }, { merge: true });
+};
+
+export const getScores = async (userId: string) => {
+    const scoresRef = doc(db, "scores", userId);
+    const userScoresDoc = await getDoc(scoresRef);
+    if (userScoresDoc.exists()) {
+        return userScoresDoc.data();
+    } else {
+        return {};
+    }
+};

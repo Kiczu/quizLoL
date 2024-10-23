@@ -1,12 +1,14 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { GameState } from "../../api/types";
+import { getAuth } from "firebase/auth";
+import { saveUserScore } from "../../api/firebase/firebse";
 
 interface Props {
   children: React.ReactNode;
 }
 
 interface GameContextType {
-  gameId: string;
+  gameId: string | null;
   gameScore: number;
   gameState: GameState;
   isWin: boolean;
@@ -28,8 +30,35 @@ export const GameContext = createContext<GameContextType>({
 export const GameProvider = ({ children }: Props) => {
   const [gameState, setGameState] = useState<GameState>(GameState.NotStarted);
   const [gameScore, setgameScore] = useState<number>(0);
-  const [gameId, setGameId] = useState<string>("");
+  const [gameId, setGameId] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [isWin, setIsWin] = useState<boolean>(false);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        setUserId(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (gameState === GameState.Finished && gameId && userId) {
+      const saveScore = async () => {
+        try {
+          await saveUserScore(userId, gameId, gameScore);
+        } catch (error) {
+          console.error("Error saving score:", error);
+        }
+      };
+      saveScore();
+    }
+  });
 
   const handleStartGame = () => {
     setGameState(GameState.InProgress);
