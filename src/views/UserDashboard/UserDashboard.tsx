@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -10,145 +10,146 @@ import {
   TextField,
   Container,
 } from "@mui/material";
-import { colors } from "../../theme/colors";
+import { getAuth } from "firebase/auth";
+import { getScores } from "../../api/firebase/firebse";
 import { useAuth } from "../../context/LoginContext/LoginContext";
+import { colors } from "../../theme/colors";
+import {
+  dashboardViewContainer,
+  inputStyle,
+  scoreCard,
+  avatarGridContainer,
+  smallAvatarStyle,
+  totalScoreCard,
+  smallAvatarsGrid,
+  smallAvatarItem,
+} from "./userDashboard.style";
+
+interface Scores {
+  [key: string]: number | undefined;
+  totalPoints?: number;
+}
 
 const UserDashboard = () => {
+  const [scores, setScores] = useState<Scores | null>(null);
+
   const { userData } = useAuth();
 
   useEffect(() => {
-    console.log(userData);
+    const auth = getAuth();
+    const unsubsccribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        getScores(user.uid).then((allPoints) => {
+          setScores(allPoints);
+        });
+      } else {
+        setScores({});
+      }
+      return () => {
+        unsubsccribe();
+      };
+    });
   }, []);
 
   return (
-    <Box
-      sx={{
-        backgroundColor: colors.background,
-        color: colors.textPrimary,
-        minHeight: "100vh",
-        p: 4,
-      }}
-    >
+    <Box sx={dashboardViewContainer}>
       <Container maxWidth="xl">
-        <Box sx={{ display: "flex", justifyContent: "space-between", mb: 4 }}>
+        <Box sx={avatarGridContainer}>
           <Avatar
             sx={{ width: 120, height: 120, backgroundColor: colors.blue2 }}
           >
             A
           </Avatar>
-          <Grid container spacing={2} sx={{ width: "50%" }}>
+          <Grid container spacing={2} sx={smallAvatarsGrid}>
             {[...Array(8)].map((_, index) => (
-              <Grid item xs={3} key={index}>
-                <Avatar
-                  sx={{ width: 60, height: 60, backgroundColor: colors.blue1 }}
-                >
-                  A{index + 1}
-                </Avatar>
+              <Grid item xs={6} sm={3} key={index} sx={smallAvatarItem}>
+                <Avatar sx={smallAvatarStyle}>A{index + 1}</Avatar>
               </Grid>
             ))}
           </Grid>
         </Box>
         <Grid container spacing={4}>
-          {[...Array(4)].map((_, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
-              <Card
-                sx={{
-                  backgroundColor: colors.backgroundSecondary,
-                  color: colors.textPrimary,
-                }}
-              >
-                <CardContent>
-                  <Typography variant="h6">Score {index + 1}</Typography>
-                  <Typography variant="body1">Score details...</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+          {scores &&
+            Object.entries(scores)
+              .filter(([key]) => key !== "totalPoints")
+              .map(([gameId, score], index) => (
+                <Grid item xs={12} sm={6} md={3} key={index}>
+                  <Card sx={scoreCard}>
+                    <CardContent>
+                      <Typography variant="h5">{gameId}</Typography>
+                      <Typography component="p" variant="h5" mt={1}>
+                        {score}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
           <Grid item xs={12} sm={6} md={3}>
-            <Card sx={{ backgroundColor: colors.gold3, color: colors.primary }}>
+            <Card sx={totalScoreCard}>
               <CardContent>
-                <Typography variant="h6">Total Score</Typography>
-                <Typography variant="body1">12345</Typography>
+                <Typography variant="h5">Total Score</Typography>
+                <Typography component="p" variant="h5" mt={1}>
+                  {scores?.totalPoints ?? "No scores yet"}
+                </Typography>
               </CardContent>
             </Card>
           </Grid>
         </Grid>
-        <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
-          <Box sx={{ width: "65%" }}>
-            <Typography variant="h5" sx={{ mb: 2 }}>
+        <Grid container spacing={5} mt={2} >
+          <Grid item sm={12} md={8}>
+            <Typography variant="h5" mb={2}>
               Edit Your Information
             </Typography>
-            <Box sx={{ mb: 3 }}>
+            <Box mb={3}>
               <TextField
                 fullWidth
-                label="First Name"
+                label={userData?.firstName}
                 variant="outlined"
-                sx={{
-                  mb: 2,
-                  backgroundColor: colors.backgroundSecondary,
-                  color: colors.textPrimary,
-                }}
+                sx={inputStyle}
               />
               <TextField
                 fullWidth
-                label="Last Name"
+                label={userData?.lastName}
                 variant="outlined"
-                sx={{
-                  mb: 2,
-                  backgroundColor: colors.backgroundSecondary,
-                  color: colors.textPrimary,
-                }}
+                sx={inputStyle}
+              />
+              <TextField
+                fullWidth
+                label={userData?.email}
+                variant="outlined"
+                sx={inputStyle}
               />
             </Box>
-            <Box sx={{ mb: 3 }}>
-              <TextField
-                fullWidth
-                label="Email"
-                variant="outlined"
-                sx={{
-                  mb: 2,
-                  backgroundColor: colors.backgroundSecondary,
-                  color: colors.textPrimary,
-                }}
-              />
-            </Box>
-            <Box sx={{ mb: 3 }}>
+            <Button variant="contained">Save Changes</Button>
+            <Box mb={3} mt={3}>
               <TextField
                 fullWidth
                 label="New Password"
                 type="password"
                 variant="outlined"
-                sx={{
-                  mb: 2,
-                  backgroundColor: colors.backgroundSecondary,
-                  color: colors.textPrimary,
-                }}
+                sx={inputStyle}
               />
               <TextField
                 fullWidth
                 label="Confirm New Password"
                 type="password"
                 variant="outlined"
-                sx={{
-                  mb: 2,
-                  backgroundColor: colors.backgroundSecondary,
-                  color: colors.textPrimary,
-                }}
+                sx={inputStyle}
               />
             </Box>
             <Button variant="contained">Save Changes</Button>
-          </Box>
-          <Box sx={{ width: "30%" }}>
-            <Typography variant="h5" sx={{ mb: 2, color: colors.gold2 }}>
+          </Grid>
+          <Grid item sm={12} md={4}>
+            <Typography variant="h5" mb={2} sx={{ color: colors.gold2 }}>
               Danger Zone
             </Typography>
-            <Typography variant="body1" sx={{ mb: 2 }}>
+            <Typography variant="body1" mb={2}>
               Once you delete your account, there is no going back. Please be
               certain.
             </Typography>
             <Button variant="contained">Delete Account</Button>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   );
