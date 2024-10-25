@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, setDoc } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { getFirestore, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { getAuth, GoogleAuthProvider, deleteUser as deleteAuthUser } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: "AIzaSyD_6SHqYUNm-11WYr9U2vxrWYTj0AF7Rws",
@@ -48,5 +48,21 @@ export const getScores = async (userId: string) => {
         return userScoresDoc.data();
     } else {
         return {};
+    }
+};
+
+export const deleteUser = async () => {
+    const auth = getAuth();
+    const db = getFirestore();
+    const user = auth.currentUser;
+
+    if (user) {
+        try {
+            await deleteDoc(doc(db, "users", user.uid));
+            await deleteAuthUser(user);
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 };

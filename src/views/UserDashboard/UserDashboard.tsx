@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Grid,
@@ -11,7 +12,7 @@ import {
   Container,
 } from "@mui/material";
 import { getAuth } from "firebase/auth";
-import { getScores } from "../../api/firebase/firebse";
+import { deleteUser, getScores } from "../../api/firebase/firebse";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { colors } from "../../theme/colors";
 import {
@@ -24,6 +25,7 @@ import {
   smallAvatarsGrid,
   smallAvatarItem,
 } from "./userDashboard.style";
+import { paths } from "../../paths";
 
 interface Scores {
   [key: string]: number | undefined;
@@ -32,8 +34,8 @@ interface Scores {
 
 const UserDashboard = () => {
   const [scores, setScores] = useState<Scores | null>(null);
-
   const { userData } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const auth = getAuth();
@@ -50,6 +52,17 @@ const UserDashboard = () => {
       };
     });
   }, []);
+
+  const handleDeleteAccount = async () => {
+    const success = await deleteUser();
+
+    if (success) {
+      navigate(paths.LOGIN);
+      console.log("Account deleted successfully");
+    } else {
+      console.error("Failed to delete account");
+    }
+  };
 
   return (
     <Box sx={dashboardViewContainer}>
@@ -95,7 +108,7 @@ const UserDashboard = () => {
             </Card>
           </Grid>
         </Grid>
-        <Grid container spacing={5} mt={2} >
+        <Grid container spacing={5} mt={2}>
           <Grid item sm={12} md={8}>
             <Typography variant="h5" mb={2}>
               Edit Your Information
@@ -147,7 +160,9 @@ const UserDashboard = () => {
               Once you delete your account, there is no going back. Please be
               certain.
             </Typography>
-            <Button variant="contained">Delete Account</Button>
+            <Button variant="contained" onClick={handleDeleteAccount}>
+              Delete Account
+            </Button>
           </Grid>
         </Grid>
       </Container>
