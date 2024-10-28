@@ -1,6 +1,7 @@
 import { colors } from "../../theme/colors";
 
 export const inputStyle = {
+    width: "100%",
     backgroundColor: colors.backgroundSecondary,
     color: colors.textPrimary,
     mb: 2,

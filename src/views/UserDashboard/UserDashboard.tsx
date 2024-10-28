@@ -11,10 +11,12 @@ import {
   TextField,
   Container,
 } from "@mui/material";
-import { getAuth } from "firebase/auth";
-import { deleteUser, getScores } from "../../api/firebase/firebse";
-import { useAuth } from "../../context/LoginContext/LoginContext";
+import { getAuth, User } from "firebase/auth";
+import ManageUserDataForm from "./ManageUserData";
+import { userService } from "../../services/user";
+import { scoreService } from "../../services/score";
 import { colors } from "../../theme/colors";
+import { paths } from "../../paths";
 import {
   dashboardViewContainer,
   inputStyle,
@@ -25,36 +27,45 @@ import {
   smallAvatarsGrid,
   smallAvatarItem,
 } from "./userDashboard.style";
-import { paths } from "../../paths";
 
-interface Scores {
-  [key: string]: number | undefined;
-  totalPoints?: number;
-}
+type Score = {
+  score: number;
+};
 
 const UserDashboard = () => {
-  const [scores, setScores] = useState<Scores | null>(null);
-  const { userData } = useAuth();
+  const [scores, setScores] = useState<Score[]>([]);
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const auth = getAuth();
     const unsubsccribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        getScores(user.uid).then((allPoints) => {
-          setScores(allPoints);
+        scoreService.get(user.uid).then((allPoints) => {
+          // Zakładając, że allPoints to obiekt, gdzie wartości to obiekty { id: string }
+          console.log(allPoints);
+          const scoreData = Object.entries(allPoints).map(
+            ([score, scoreObj]) => ({
+              gameId: scoreObj.id,
+              score,
+            })
+          );
+          console.log(scoreData);
+          // setScores(scoreData);
         });
       } else {
-        setScores({});
+        setScores([]);
+        setUser(null);
+        navigate(paths.LOGIN);
       }
       return () => {
         unsubsccribe();
       };
     });
-  }, []);
+  }, [navigate]);
 
   const handleDeleteAccount = async () => {
-    const success = await deleteUser();
+    const success = await userService.remove();
 
     if (success) {
       navigate(paths.LOGIN);
@@ -63,6 +74,8 @@ const UserDashboard = () => {
       console.error("Failed to delete account");
     }
   };
+
+  const totalScore = scores.reduce((total, score) => total + score.score, 0);
 
   return (
     <Box sx={dashboardViewContainer}>
@@ -91,7 +104,7 @@ const UserDashboard = () => {
                     <CardContent>
                       <Typography variant="h5">{gameId}</Typography>
                       <Typography component="p" variant="h5" mt={1}>
-                        {score}
+                        {totalScore}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -102,7 +115,7 @@ const UserDashboard = () => {
               <CardContent>
                 <Typography variant="h5">Total Score</Typography>
                 <Typography component="p" variant="h5" mt={1}>
-                  {scores?.totalPoints ?? "No scores yet"}
+                  {totalScore ?? "No scores yet"}
                 </Typography>
               </CardContent>
             </Card>
@@ -113,27 +126,9 @@ const UserDashboard = () => {
             <Typography variant="h5" mb={2}>
               Edit Your Information
             </Typography>
-            <Box mb={3}>
-              <TextField
-                fullWidth
-                label={userData?.firstName}
-                variant="outlined"
-                sx={inputStyle}
-              />
-              <TextField
-                fullWidth
-                label={userData?.lastName}
-                variant="outlined"
-                sx={inputStyle}
-              />
-              <TextField
-                fullWidth
-                label={userData?.email}
-                variant="outlined"
-                sx={inputStyle}
-              />
+            <Box mb={3} mt={3}>
+              <ManageUserDataForm user={user} />
             </Box>
-            <Button variant="contained">Save Changes</Button>
             <Box mb={3} mt={3}>
               <TextField
                 fullWidth
@@ -149,8 +144,8 @@ const UserDashboard = () => {
                 variant="outlined"
                 sx={inputStyle}
               />
+              <Button variant="contained">Save Changes</Button>
             </Box>
-            <Button variant="contained">Save Changes</Button>
           </Grid>
           <Grid item sm={12} md={4}>
             <Typography variant="h5" mb={2} sx={{ color: colors.gold2 }}>

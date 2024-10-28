@@ -2,17 +2,18 @@ import { useContext, useEffect, useState } from "react";
 import { ChampionDetails } from "../../api/types";
 import { characterService } from '../../services/characterService';
 import { GameContext } from '../../context/GameContext/GameContext';
+import { useAuth } from "../../context/LoginContext/LoginContext";
 
 const maxAttempts = 6;
 const winBonus = 10;
 
 const useHangmanData = () => {
+    const { userData } = useAuth();
     const [data, setData] = useState<null | ChampionDetails[]>(null);
     const [letters, setLetters] = useState<{ isCorrect: boolean, value: string }[]>([]);
     const [wrongGuesses, setWrongGuesses] = useState<number>(0);
     const [inputLetter, setInputLetter] = useState<string>("");
     const [points, setPoints] = useState<number>(0);
-    const [isWin, setIsWin] = useState<boolean>(false);
 
     const hangmanContext = useContext(GameContext);
     const isGameOver = wrongGuesses === maxAttempts;
@@ -34,12 +35,11 @@ const useHangmanData = () => {
 
     useEffect(() => {
         if (isGameOver) {
-            hangmanContext?.handleEndGame(points, isWin);
+            hangmanContext?.handleEndGame(userData?.id || "", points, false);
         } else if (isAllAnswerCorrect) {
-            setIsWin(true);
-            hangmanContext?.handleEndGame(points + winBonus, isWin);
+            hangmanContext?.handleEndGame(userData?.id || "", points + winBonus, true);
         }
-    }, [wrongGuesses, letters, hangmanContext, isGameOver, isAllAnswerCorrect, points, isWin]);
+    }, [isGameOver, isAllAnswerCorrect]);
 
     const changeLetter = (letter: string) => {
         setLetters((prevLetters) => prevLetters.map((item) => {
@@ -73,7 +73,7 @@ const useHangmanData = () => {
         setWrongGuesses((prevWrongGuesses) => prevWrongGuesses + 1);
     };
 
-    return { inputLetter, letters, wrongGuesses, isWin, maxAttempts, changeLetter, handleLetterChange, userGuess, resetWrongGuesses };
+    return { inputLetter, letters, wrongGuesses, maxAttempts, changeLetter, handleLetterChange, userGuess, resetWrongGuesses };
 }
 
 export default useHangmanData;
