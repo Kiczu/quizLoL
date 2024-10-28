@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
-import { getAuth, GoogleAuthProvider, deleteUser as deleteAuthUser } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider, deleteUser as deleteAuthUser, updateEmail } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: "AIzaSyD_6SHqYUNm-11WYr9U2vxrWYTj0AF7Rws",
@@ -50,6 +50,33 @@ export const getScores = async (userId: string) => {
         return {};
     }
 };
+
+export const updateUserDetails = async (userId: string, updatedData: any) => {
+    console.log('Updated data:', updatedData);
+    const userRef = doc(db, "users", userId);
+    try {
+        await setDoc(userRef, updatedData, { merge: true });
+        console.log("Dane użytkownika zaktualizowane w Firestore.");
+        return true;
+    } catch (error) {
+        console.error("Błąd podczas aktualizacji danych użytkownika w Firestore:", error);
+        return false;
+    }
+};
+
+export const updateUserEmail = async(newEmail: string ) => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+
+    if (user) {
+        try {
+            await updateEmail(user, newEmail);
+            return true;
+        } catch (error) {
+            return false;
+        }
+    }
+}
 
 export const deleteUser = async () => {
     const auth = getAuth();

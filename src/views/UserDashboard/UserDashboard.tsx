@@ -11,9 +11,10 @@ import {
   TextField,
   Container,
 } from "@mui/material";
-import { getAuth } from "firebase/auth";
+import { getAuth, User } from "firebase/auth";
+import ManageUserDataForm from "./ManageUserData";
 import { deleteUser, getScores } from "../../api/firebase/firebse";
-import { useAuth } from "../../context/LoginContext/LoginContext";
+import { paths } from "../../paths";
 import { colors } from "../../theme/colors";
 import {
   dashboardViewContainer,
@@ -25,7 +26,6 @@ import {
   smallAvatarsGrid,
   smallAvatarItem,
 } from "./userDashboard.style";
-import { paths } from "../../paths";
 
 interface Scores {
   [key: string]: number | undefined;
@@ -34,7 +34,7 @@ interface Scores {
 
 const UserDashboard = () => {
   const [scores, setScores] = useState<Scores | null>(null);
-  const { userData } = useAuth();
+  const [user, setUser] = useState<User | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,12 +46,14 @@ const UserDashboard = () => {
         });
       } else {
         setScores({});
+        setUser(null);
+        navigate(paths.LOGIN);
       }
       return () => {
         unsubsccribe();
       };
     });
-  }, []);
+  }, [navigate]);
 
   const handleDeleteAccount = async () => {
     const success = await deleteUser();
@@ -113,27 +115,9 @@ const UserDashboard = () => {
             <Typography variant="h5" mb={2}>
               Edit Your Information
             </Typography>
-            <Box mb={3}>
-              <TextField
-                fullWidth
-                label={userData?.firstName}
-                variant="outlined"
-                sx={inputStyle}
-              />
-              <TextField
-                fullWidth
-                label={userData?.lastName}
-                variant="outlined"
-                sx={inputStyle}
-              />
-              <TextField
-                fullWidth
-                label={userData?.email}
-                variant="outlined"
-                sx={inputStyle}
-              />
+            <Box mb={3} mt={3}>
+              <ManageUserDataForm user={user} />
             </Box>
-            <Button variant="contained">Save Changes</Button>
             <Box mb={3} mt={3}>
               <TextField
                 fullWidth
@@ -149,8 +133,8 @@ const UserDashboard = () => {
                 variant="outlined"
                 sx={inputStyle}
               />
+              <Button variant="contained">Save Changes</Button>
             </Box>
-            <Button variant="contained">Save Changes</Button>
           </Grid>
           <Grid item sm={12} md={4}>
             <Typography variant="h5" mb={2} sx={{ color: colors.gold2 }}>
