@@ -7,20 +7,18 @@ export type ApiResponse = {
 
 export type ApiData = Record<string, ChampionDetails>;
 
-export type UserDetails = {
-    name: string;
-    surname: string;
+export type User = {
+    id: string;
+    login: string;
+    firstName: string;
     email: string;
-    password: string;
-    totalPoints: number;
+    // totalPoints: number;
 }
 
-export type UserData = {
-    firstName: string;
-    lastName: string;
+export type AuthData = {
     email: string;
     password: string;
-}
+};
 
 
 export type ChampionDetails = {

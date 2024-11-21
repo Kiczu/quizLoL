@@ -26,7 +26,7 @@ const Hangman = () => {
           >
             <Grid container direction="column" alignItems="center" spacing={2}>
               <Typography component="span" variant="h6" color="#fff">
-                Liczba nieudanych prób: {wrongGuesses}
+                Number of failed attempts: {wrongGuesses}
               </Typography>
               <Box marginY={2} fontSize="1.5rem">
                 {letters.map(({ value, isCorrect }, key) => (

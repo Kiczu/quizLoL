@@ -11,12 +11,12 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import { Form, Formik } from "formik";
 import { useAuth } from "../../../context/LoginContext/LoginContext";
-import type { UserData } from "../../../api/types";
+import type { User } from "../../../api/types";
 import { paths } from "../../../paths";
 
 const registerSchema = yup.object().shape({
-  firstName: yup.string().required("Imię jest wymagane"),
-  lastName: yup.string().required("Nazwisko jest wymagane"),
+  login: yup.string().required("Login is required"),
+  firstName: yup.string().required("Name is required"),
   email: yup
     .string()
     .email("Wprowadź poprawny adres E-Mail")
@@ -34,13 +34,14 @@ const registerSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Hasła muszą być takie same"),
 });
 
-interface RegistrationData extends UserData {
+type RegistrationData = Omit<User, "id"> & {
+  password: string;
   confirmPassword: string;
-}
+};
 
 const initValues: RegistrationData = {
+  login: "",
   firstName: "",
-  lastName: "",
   email: "",
   password: "",
   confirmPassword: "",
@@ -49,7 +50,8 @@ const initValues: RegistrationData = {
 const RegisterForm = () => {
   const { handleCreateUser } = useAuth();
 
-  const handleSubmit = (values: UserData) => handleCreateUser(values);
+  const handleSubmit = ({confirmPassword, ...values}: RegistrationData) =>
+    handleCreateUser(values);
 
   return (
     <Box
@@ -76,6 +78,22 @@ const RegisterForm = () => {
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
+                  autoComplete="family-name"
+                  name="login"
+                  fullWidth
+                  id="login"
+                  label="Nickname"
+                  value={values.login}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  error={Boolean(touched.login) && Boolean(errors.login)}
+                  helperText={
+                    touched.login && errors.login ? errors.login : " "
+                  }
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
                   autoComplete="given-name"
                   name="firstName"
                   fullWidth
@@ -92,22 +110,6 @@ const RegisterForm = () => {
                     touched.firstName && errors.firstName
                       ? errors.firstName
                       : " "
-                  }
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="family-name"
-                  name="lastName"
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  value={values.lastName}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  error={Boolean(touched.lastName) && Boolean(errors.lastName)}
-                  helperText={
-                    touched.lastName && errors.lastName ? errors.lastName : " "
                   }
                 />
               </Grid>

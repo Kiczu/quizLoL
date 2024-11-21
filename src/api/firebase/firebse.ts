@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, collection, getDocs, setDoc } from 'firebase/firestore';
+import { getFirestore } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -15,18 +15,3 @@ export const db = getFirestore(app);
 export const provider = new GoogleAuthProvider();
 export const auth = getAuth();
 
-export const createUser = async ({ id, ...userData }: any) => {
-    await setDoc(doc(db, "users", id), userData);
-  };
-
-export const getJinx = async () => {
-    const ref = doc(db, 'champions', 'mQTzrtYjpdVEZDZxWmQ6');
-    const champion = await getDoc(ref);
-
-    const ref2 = collection(db, 'champions');
-    const champions = await getDocs(ref2);
-
-    champions.forEach(el => {
-        console.log(el.data());
-    })
-} 

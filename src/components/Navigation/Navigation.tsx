@@ -78,8 +78,9 @@ const Navigation = () => {
 
   return (
     <AppBar
+      position="sticky"
       className="app-bar"
-      sx={{ position: "sticky", backgroundColor: "#0A1428" }}
+      sx={{ backgroundColor: "#0A1428" }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
