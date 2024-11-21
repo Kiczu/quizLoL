@@ -17,6 +17,7 @@ import { userService } from "../../services/user";
 import { scoreService } from "../../services/score";
 import { colors } from "../../theme/colors";
 import { paths } from "../../paths";
+
 import {
   dashboardViewContainer,
   inputStyle,
