@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { getAuth } from "firebase/auth";
 import { GameState } from "../../api/types";
-import { saveUserScore } from "../../api/firebase/firebse";
+import { scoreService } from "../../services/score";
 
 interface Props {
   children: React.ReactNode;
@@ -51,7 +51,7 @@ export const GameProvider = ({ children }: Props) => {
     if (gameState === GameState.Finished && gameId && userId) {
       const saveScore = async () => {
         try {
-          await saveUserScore(userId, gameId, gameScore);
+          await scoreService.add(userId, gameId, gameScore);
         } catch (error) {
           console.error("Error saving score:", error);
         }
@@ -64,10 +64,18 @@ export const GameProvider = ({ children }: Props) => {
     setGameState(GameState.InProgress);
   };
 
-  const handleEndGame = (points: number, isWin: boolean) => {
+  const handleEndGame = async (points: number, isWin: boolean) => {
     setGameState(GameState.Finished);
     setgameScore(points);
     setIsWin(isWin);
+
+    if (userId && gameId) {
+      try {
+        await scoreService.update(userId, gameId, points);
+      } catch (error) {
+        console.error("Error updating score:", error);
+      }
+    }
   };
 
   return (

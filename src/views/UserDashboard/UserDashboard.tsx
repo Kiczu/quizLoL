@@ -12,7 +12,8 @@ import {
   Container,
 } from "@mui/material";
 import { getAuth } from "firebase/auth";
-import { deleteUser, getScores } from "../../api/firebase/firebse";
+import { deleteUser } from "../../api/firebase/firebse";
+import { scoreService } from "../../services/score";
 import { useAuth } from "../../context/LoginContext/LoginContext";
 import { colors } from "../../theme/colors";
 import {
@@ -41,8 +42,8 @@ const UserDashboard = () => {
     const auth = getAuth();
     const unsubsccribe = auth.onAuthStateChanged((user) => {
       if (user) {
-        getScores(user.uid).then((allPoints) => {
-          setScores(allPoints);
+        scoreService.get(user.uid).then((allPoints) => {
+          // setScores(allPoints);
         });
       } else {
         setScores({});

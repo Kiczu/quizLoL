@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, deleteDoc } from 'firebase/firestore';
 import { getAuth, GoogleAuthProvider, deleteUser as deleteAuthUser } from 'firebase/auth';
 
 const firebaseConfig = {
@@ -19,37 +19,37 @@ export const createUser = async ({ id, ...userData }: any) => {
     await setDoc(doc(db, "users", id), userData);
 };
 
-export const saveUserScore = async (userId: string, gameId: string, score: number) => {
-    const scoresRef = doc(db, "scores", userId);
-    const scoreSnap = await getDoc(scoresRef);
+// export const saveUserScore = async (userId: string, gameId: string, score: number) => {
+//     const scoresRef = doc(db, "scores", userId);
+//     const scoreSnap = await getDoc(scoresRef);
 
-    let newScore = score;
-    let totalPoints = score;
+//     let newScore = score;
+//     let totalPoints = score;
 
-    if (scoreSnap.exists()) {
-        const existingScores = scoreSnap.data();
+//     if (scoreSnap.exists()) {
+//         const existingScores = scoreSnap.data();
 
-        if (existingScores[gameId]) {
-            newScore += existingScores[gameId];
-        }
-        totalPoints += existingScores[gameId];
-    }
+//         if (existingScores[gameId]) {
+//             newScore += existingScores[gameId];
+//         }
+//         totalPoints += existingScores[gameId];
+//     }
 
-    await setDoc(scoresRef, {
-        [gameId]: newScore,
-        totalPoints: totalPoints,
-    }, { merge: true });
-};
+//     await setDoc(scoresRef, {
+//         [gameId]: newScore,
+//         totalPoints: totalPoints,
+//     }, { merge: true });
+// };
 
-export const getScores = async (userId: string) => {
-    const scoresRef = doc(db, "scores", userId);
-    const userScoresDoc = await getDoc(scoresRef);
-    if (userScoresDoc.exists()) {
-        return userScoresDoc.data();
-    } else {
-        return {};
-    }
-};
+// export const getScores = async (userId: string) => {
+//     const scoresRef = doc(db, "scores", userId);
+//     const userScoresDoc = await getDoc(scoresRef);
+//     if (userScoresDoc.exists()) {
+//         return userScoresDoc.data();
+//     } else {
+//         return {};
+//     }
+// };
 
 export const deleteUser = async () => {
     const auth = getAuth();
