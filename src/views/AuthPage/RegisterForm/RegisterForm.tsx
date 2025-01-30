@@ -39,6 +39,8 @@ interface RegistrationData extends UserDataResponseRegister {
 }
 
 const initValues: RegistrationData = {
+  uid: "",
+  avatar: "",
   firstName: "",
   lastName: "",
   email: "",
@@ -49,7 +51,8 @@ const initValues: RegistrationData = {
 const RegisterForm = () => {
   const { handleCreateUser } = useAuth();
 
-  const handleSubmit = (values: UserDataResponseRegister) => handleCreateUser(values);
+  const handleSubmit = (values: UserDataResponseRegister) =>
+    handleCreateUser(values);
 
   return (
     <Box

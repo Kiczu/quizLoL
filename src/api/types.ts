@@ -16,6 +16,8 @@ export type UserData = {
 }
 
 export type UserDataResponseRegister = {
+    uid: string;
+    avatar: string;
     firstName: string;
     lastName: string;
     email: string;
@@ -61,6 +63,11 @@ export type ChampionDetails = {
         }
     ];
 };
+
+export interface Scores {
+    gameId: string;
+    score: number;
+}
 
 export enum GameState {
     NotStarted = "NotStarted",
