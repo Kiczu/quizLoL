@@ -38,10 +38,6 @@ const pages = [
 
 const settings = [
   {
-    name: "Profile",
-    href: paths.PROFILE,
-  },
-  {
     name: "Dashboard",
     href: paths.DASHBOARD,
   },
@@ -78,8 +74,9 @@ const Navigation = () => {
 
   return (
     <AppBar
+      position="sticky"
       className="app-bar"
-      sx={{ position: "sticky", backgroundColor: "#0A1428" }}
+      sx={{ backgroundColor: "#0A1428" }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -94,7 +91,10 @@ const Navigation = () => {
           <Box>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar
+                  alt={userData?.firstName}
+                  src={userData?.avatar || "/default-avatar.png"}
+                />
               </IconButton>
             </Tooltip>
             <Menu

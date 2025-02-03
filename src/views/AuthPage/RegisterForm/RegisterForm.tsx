@@ -11,7 +11,7 @@ import {
 import { Link as RouterLink } from "react-router-dom";
 import { Form, Formik } from "formik";
 import { useAuth } from "../../../context/LoginContext/LoginContext";
-import type { UserData } from "../../../api/types";
+import type { UserDataResponseRegister } from "../../../api/types";
 import { paths } from "../../../paths";
 
 const registerSchema = yup.object().shape({
@@ -34,11 +34,13 @@ const registerSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "Hasła muszą być takie same"),
 });
 
-interface RegistrationData extends UserData {
+interface RegistrationData extends UserDataResponseRegister {
   confirmPassword: string;
 }
 
 const initValues: RegistrationData = {
+  uid: "",
+  avatar: "",
   firstName: "",
   lastName: "",
   email: "",
@@ -49,7 +51,8 @@ const initValues: RegistrationData = {
 const RegisterForm = () => {
   const { handleCreateUser } = useAuth();
 
-  const handleSubmit = (values: UserData) => handleCreateUser(values);
+  const handleSubmit = (values: UserDataResponseRegister) =>
+    handleCreateUser(values);
 
   return (
     <Box

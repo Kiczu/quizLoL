@@ -3,9 +3,9 @@ import startGame from "../../assets/images/startGame.jpg";
 export const startGameContainer = {
     position: "relative",
     backgroundImage: `url(${startGame})`,
-    backgroundPosition: "top center",
+    backgroundPosition: "50% 20%",
     backgroundSize: "cover",
-    height: "100vh",
+    minHeight: "90vh",
 }
 export const endGameContainer = {
     display: "flex",
@@ -13,7 +13,7 @@ export const endGameContainer = {
     alignItems: "center",
     justifyContent: "center",
     gap: 2,
-    height: "100vh",
+    minHeight: "90vh",
     background: "#010A13",
     color: "#F0E6D2",
 }
@@ -30,7 +30,7 @@ export const overlayGameBox = {
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
-    height: "100%",
+    minHeight: "90vh",
     background: "rgba(1, 10, 19, 0.7)",
 }
 

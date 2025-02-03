@@ -1,16 +1,14 @@
-import { Box, Typography } from "@mui/material";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
-import { paths } from "../../paths";
+import { Box, Typography } from "@mui/material";
 import { endGameContainer, victoryGame, deafetGame } from "./gameBoxStyles";
+import { GameContext } from "../../context/GameContext/GameContext";
+import { paths } from "../../paths";
 import Deafet from "../../assets/images/deafet.png";
 import Victory from "../../assets/images/victory.png";
 
-interface Props {
-  score: number;
-  isWin: boolean;
-}
-
-const EndGame = ({ score, isWin }: Props) => {
+const EndGame = () => {
+  const { isWin, gameScore } = useContext(GameContext);
   return (
     <Box sx={endGameContainer}>
       {!isWin ? (
@@ -24,7 +22,7 @@ const EndGame = ({ score, isWin }: Props) => {
         </>
       )}
       <Typography component="p" fontSize="1.6rem">
-        Your score is: {score}
+        Your score is: {gameScore}
       </Typography>
       <Typography component="p" fontSize="1.2rem">
         You can check your total ranking <Link to={paths.RANKING}>here</Link>
