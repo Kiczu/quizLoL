@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Box, Container, Grid, Tab, Tabs, Typography } from "@mui/material";
-import { characterService } from "../../api/characterService";
+import { characterService } from "../../services/characterService";
 import { ChampionDetails } from "../../api/types";
 import backgroundMap from "../../assets/images/backgroundMap.jpg";
 import CustomTabPanel from "../CustomTabPanel/CustomTabPanel";

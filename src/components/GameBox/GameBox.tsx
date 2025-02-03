@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Box } from "@mui/material";
 import { GameState } from "../../api/types";
 import { GameContext } from "../../context/GameContext/GameContext";
@@ -11,7 +11,11 @@ type Props = {
 };
 
 const GameBox = ({ children, title }: Props) => {
-  const { gameState, gameScore, isWin } = useContext(GameContext);
+  const { gameState, setGameId } = useContext(GameContext);
+
+  useEffect(() => {
+    setGameId(title);
+  }, [title, setGameId]);
 
   return (
     <Box>
@@ -21,9 +25,7 @@ const GameBox = ({ children, title }: Props) => {
         {gameState === GameState.InProgress && (
           <Box width={"100%"}>{children}</Box>
         )}
-        {gameState === GameState.Finished && (
-          <EndGame score={gameScore} isWin={isWin} />
-        )}
+        {gameState === GameState.Finished && <EndGame />}
       </Box>
     </Box>
   );
