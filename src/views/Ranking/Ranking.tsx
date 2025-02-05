@@ -14,19 +14,15 @@ import {
   Avatar,
 } from "@mui/material";
 import { colors } from "../../theme/colors";
+import useRanking from "./useRanking";
 
 const Ranking = () => {
+  const { ranking } = useRanking();
   const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setActiveTab(newValue);
   };
-
-  const rankingData = [
-    { avatar: "A", name: "User1", score: 1200, rank: 1 },
-    { avatar: "B", name: "User2", score: 1150, rank: 2 },
-    { avatar: "C", name: "User3", score: 1100, rank: 3 },
-  ];
 
   return (
     <Box
@@ -61,10 +57,10 @@ const Ranking = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rankingData.map((user, index) => (
+            {ranking.map((user, index) => (
               <TableRow key={index}>
                 <TableCell sx={{ color: colors.textSecondary }}>
-                  {user.rank}
+                  {index + 1}
                 </TableCell>
                 <TableCell>
                   <Avatar sx={{ backgroundColor: colors.blue2 }}>
@@ -72,7 +68,7 @@ const Ranking = () => {
                   </Avatar>
                 </TableCell>
                 <TableCell sx={{ color: colors.textSecondary }}>
-                  {user.name}
+                  {user.userId}
                 </TableCell>
                 <TableCell sx={{ color: colors.textSecondary }}>
                   {user.score}
