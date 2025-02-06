@@ -17,19 +17,7 @@ const useRanking = (selectedGameMode: string) => {
                 const rankingQuery = query(scoresRef);
                 const querySnapshot = await getDocs(rankingQuery);
 
-                const rankingData: ScoreData[] = querySnapshot.docs
-                    .map((doc) => {
-                        const [userId, gameMode] = doc.id.split("_");
-                        const data = doc.data();
-
-                        return {
-                            userId,
-                            score: data.score || 0,
-                            gameMode,
-                        };
-                    })
-                    .filter((item) => item.gameMode === selectedGameMode)
-                    .sort((a, b) => b.score - a.score);
+                const rankingData = calculateRanking(querySnapshot.docs, selectedGameMode);
                 setRanking(rankingData);
             } catch (error) {
                 console.error("Error fetching ranking:", error);
@@ -41,6 +29,25 @@ const useRanking = (selectedGameMode: string) => {
     }, [selectedGameMode]);
 
     return { ranking };
+};
+
+const calculateRanking = (docs: any[], selectedGameMode: string): ScoreData[] => {
+    let rankingData: Record<string, number> = {};
+
+    docs.forEach((doc) => {
+        const [userId, gameMode] = doc.id.split("_");
+        const score = doc.data().score || 0;
+
+        if (selectedGameMode === "TotalScore") {
+            rankingData[userId] = (rankingData[userId] || 0) + score;
+        } else if (gameMode === selectedGameMode) {
+            rankingData[userId] = score;
+        }
+    });
+
+    return Object.entries(rankingData)
+        .map(([userId, score]) => ({ userId, score }))
+        .sort((a, b) => b.score - a.score);
 };
 
 export default useRanking;
