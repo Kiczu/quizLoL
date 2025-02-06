@@ -1,43 +1,46 @@
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../../api/firebase/firebse";
 
 interface ScoreData {
     userId: string;
     score: number;
-    avatar?: string;
-    username?: string;
 }
 
-const useRanking = () => {
+const useRanking = (selectedGameMode: string) => {
     const [ranking, setRanking] = useState<ScoreData[]>([]);
-    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchRanking = async () => {
-            setLoading(true);
             try {
-                const scoresRef = collection(db, 'scores');
-                const q = query(scoresRef, orderBy('score', 'desc'));
-                const querySnapshot = await getDocs(q);
+                const scoresRef = collection(db, "scores");
+                const rankingQuery = query(scoresRef);
+                const querySnapshot = await getDocs(rankingQuery);
 
-                const rankingData: ScoreData[] = querySnapshot.docs.map((doc) => ({
-                    userId: doc.id,
-                    score: doc.data().score || 0,
-                }));
-                console.log(rankingData);
-                console.log(ranking);
+                const rankingData: ScoreData[] = querySnapshot.docs
+                    .map((doc) => {
+                        const [userId, gameMode] = doc.id.split("_");
+                        const data = doc.data();
+
+                        return {
+                            userId,
+                            score: data.score || 0,
+                            gameMode,
+                        };
+                    })
+                    .filter((item) => item.gameMode === selectedGameMode)
+                    .sort((a, b) => b.score - a.score);
                 setRanking(rankingData);
             } catch (error) {
-                console.error('Error fetching ranking:', error);
-            } finally {
-                setLoading(false);
+                console.error("Error fetching ranking:", error);
+                setRanking([]);
             }
         };
-        fetchRanking();
-    }, [])
 
-    return { ranking, loading };
-}
+        fetchRanking();
+    }, [selectedGameMode]);
+
+    return { ranking };
+};
 
 export default useRanking;

@@ -1,28 +1,15 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Typography,
-  Tabs,
-  Tab,
-  Avatar,
-} from "@mui/material";
+import { Box, Typography, Tabs, Tab } from "@mui/material";
 import { colors } from "../../theme/colors";
 import useRanking from "./useRanking";
+import RankingTable from "./RankingTable";
+
+const gameModes = ["Hangman", "Champions", "Skills", "Quote", "TotalScore"];
 
 const Ranking = () => {
-  const { ranking } = useRanking();
   const [activeTab, setActiveTab] = useState(0);
-
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setActiveTab(newValue);
-  };
+  const selectedMode = gameModes[activeTab];
+  const { ranking } = useRanking(selectedMode);
 
   return (
     <Box
@@ -36,50 +23,38 @@ const Ranking = () => {
       <Typography variant="h4" sx={{ mb: 4, color: colors.gold1 }}>
         User Rankings
       </Typography>
+
       <Tabs
         value={activeTab}
-        onChange={handleTabChange}
+        onChange={(_, newValue) => setActiveTab(newValue)}
         sx={{ mb: 4, borderBottom: 1, borderColor: colors.grey2 }}
       >
-        <Tab label="Mode 1" sx={{ color: colors.textPrimary }} />
-        <Tab label="Mode 2" sx={{ color: colors.textPrimary }} />
-        <Tab label="Mode 3" sx={{ color: colors.textPrimary }} />
-        <Tab label="Total Score" sx={{ color: colors.gold3 }} />
+        {gameModes.map((mode, index) => (
+          <Tab
+            key={mode}
+            label={mode}
+            sx={{
+              color:
+                index === gameModes.length - 1
+                  ? colors.gold3
+                  : colors.textPrimary,
+            }}
+          />
+        ))}
       </Tabs>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell sx={{ color: colors.textPrimary }}>Rank</TableCell>
-              <TableCell sx={{ color: colors.textPrimary }}>Avatar</TableCell>
-              <TableCell sx={{ color: colors.textPrimary }}>Username</TableCell>
-              <TableCell sx={{ color: colors.textPrimary }}>Score</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {ranking.map((user, index) => (
-              <TableRow key={index}>
-                <TableCell sx={{ color: colors.textSecondary }}>
-                  {index + 1}
-                </TableCell>
-                <TableCell>
-                  <Avatar sx={{ backgroundColor: colors.blue2 }}>
-                    {user.avatar}
-                  </Avatar>
-                </TableCell>
-                <TableCell sx={{ color: colors.textSecondary }}>
-                  {user.userId}
-                </TableCell>
-                <TableCell sx={{ color: colors.textSecondary }}>
-                  {user.score}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {ranking.length > 0 ? (
+        <RankingTable ranking={ranking} />
+      ) : (
+        <EmptyRankingMessage />
+      )}
     </Box>
   );
 };
+
+const EmptyRankingMessage = () => (
+  <Typography sx={{ color: colors.textSecondary, mt: 2, textAlign: "center" }}>
+    No rankings available for this mode.
+  </Typography>
+);
 
 export default Ranking;
