@@ -18,9 +18,8 @@ import {
 const UserDashboard = () => {
   const { userData } = useAuth();
   const navigate = useNavigate();
-  const { formData, setFormData, updateUserProfile } = useUserProfile(
-    userData?.uid
-  );
+  const { formData, setFormData, updateUserProfile, isUsernameEditable } =
+    useUserProfile();
   const { scores } = useScores(userData?.uid);
 
   const handleDeleteAccount = async () => {
@@ -49,13 +48,8 @@ const UserDashboard = () => {
             <Typography variant="h5">Edit Your Data</Typography>
             <EditUserForm
               formData={formData}
-              handleInputChange={(e) =>
-                setFormData({
-                  ...formData,
-                  [e.target.name]: e.target.value,
-                })
-              }
-              handleSaveChanges={updateUserProfile}
+              isUsernameEditable={isUsernameEditable}
+              onSubmit={updateUserProfile}
             />
             <ChangePasswordForm
               handlePasswordChange={userService.handlePasswordChange}

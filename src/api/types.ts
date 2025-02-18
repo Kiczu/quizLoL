@@ -22,6 +22,7 @@ export type UserDataResponseRegister = {
     lastName: string;
     email: string;
     password: string;
+    username: string | null;
 }
 
 
