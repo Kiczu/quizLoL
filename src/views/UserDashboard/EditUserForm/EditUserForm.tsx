@@ -33,7 +33,12 @@ const validationSchema = yup.object({
 const EditUserForm = ({ formData, isUsernameEditable, onSubmit }: Props) => {
   return (
     <Formik
-      initialValues={formData}
+      initialValues={{
+        username: formData.username || "",
+        firstName: "",
+        lastName: "",
+        email: "",
+      }}
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       context={{ isUsernameEditable }}

@@ -125,6 +125,22 @@ export const LoginProvider = ({ children }: Props) => {
       const user = authResult.user;
       if (!user) return;
 
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+
+      if (!userDoc.exists()) {
+        const newUserData = {
+          id: user.uid,
+          avatar: "/default-avatar.png",
+          firstName: user.displayName,
+          lastName: user.displayName,
+          email: user.email,
+        };
+        // await userService.createUser(newUserData);
+        // await setDoc(doc(db, "scores", user.uid), {
+        //   username: "",
+        // });
+        await setDoc(doc(db, "users", user.uid), newUserData);
+      }
       await getUserData(user.uid);
     } catch (error) {
       console.error("Error signing in with Google:", error);
