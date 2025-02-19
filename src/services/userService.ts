@@ -1,6 +1,6 @@
 import { doc, getDoc, updateDoc, deleteDoc, setDoc } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { getAuth, deleteUser as firebaseDeleteUser, updatePassword, GoogleAuthProvider, reauthenticateWithPopup } from "firebase/auth";
+import { getAuth, updatePassword, GoogleAuthProvider, reauthenticateWithPopup } from "firebase/auth";
 import { db } from "../api/firebase/firebse";
 
 const createUser = async ({ id, ...userData }: any) => {
@@ -22,10 +22,12 @@ const updateUserData = async (userId: string, data: Record<string, any>) => {
     const userDoc = doc(db, "users", userId);
     await updateDoc(userDoc, data);
 };
+
 const updateUserAvatar = async (userId: string, avatarPath: string) => {
     const userDoc = doc(db, "users", userId);
     await updateDoc(userDoc, { avatar: avatarPath });
 };
+
 const uploadUserAvatar = async (userId: string, file: File): Promise<string> => {
     const storage = getStorage();
     const avatarRef = ref(storage, `avatars/${userId}_${file.name}`);
@@ -36,17 +38,17 @@ const uploadUserAvatar = async (userId: string, file: File): Promise<string> => 
     return downloadURL;
 };
 
-const deleteUser = async () => {
+const deleteUser = async (userId: string) => {
+    if (!userId) return;
+
+    await deleteDoc(doc(db, "users", userId));
+    await deleteDoc(doc(db, "scores", userId));
+
     const auth = getAuth();
     const user = auth.currentUser;
+    if (!user) throw new Error("No authenticated user found.");
 
-    if (user) {
-        const userDoc = doc(db, "users", user.uid);
-        await deleteDoc(userDoc);
-        await firebaseDeleteUser(user);
-        return true;
-    }
-    return false;
+    await user.delete();
 };
 
 const changeUserPassword = async (newPassword: string) => {
